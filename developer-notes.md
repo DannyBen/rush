@@ -8,7 +8,7 @@
 
 ## Setup
 
-For easy development, configure the folder where you cloned the `rush-cli`
+For easy development, configure the folder where you cloned the `rush`
 reposotory to use the included sample repo.
 
 If you are using direnv, create this file:

@@ -9,7 +9,7 @@ _  /     /_/    \__,_/ /____/ /_/ /_/
 /_/      Personal Package Manager     
 ```
 
-[![Build Status](https://github.com/DannyBen/rush-cli/workflows/Test/badge.svg)](https://github.com/DannyBen/rush-cli/actions?query=workflow%3ATest)
+[![Build Status](https://github.com/DannyBen/rush/workflows/Test/badge.svg)](https://github.com/DannyBen/rush/actions?query=workflow%3ATest)
 
 ---
 
@@ -234,4 +234,4 @@ to contribute, feel free to [open an issue][issues].
 [dannyben-repo]: https://github.com/dannyben/rush-repo
 [bashly]: https://bashly.dannyb.co/
 [docker-image]: https://github.com/dannyben/docker-rush
-[issues]: https://github.com/DannyBen/rush-cli/issues
+[issues]: https://github.com/DannyBen/rush/issues

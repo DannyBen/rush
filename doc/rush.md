@@ -149,8 +149,8 @@ SEE ALSO
 
 # SOURCE CODE
 
-https://github.com/dannyben/rush-cli
+https://github.com/dannyben/rush
 
 # ISSUE TRACKER
 
-https://github.com/dannyben/rush-cli/issues
+https://github.com/dannyben/rush/issues

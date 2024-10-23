@@ -106,7 +106,7 @@ initialize() {
 }
 
 section "Initializing"
-initialize "DannyBen/rush-cli"
+initialize "DannyBen/rush"
 
 section "Checking for pre-requisites"
 need git

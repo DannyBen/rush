@@ -7,11 +7,11 @@ x_mandoc_authors: Danny Ben Shitrit <https://github.com/dannyben>
 x_mandoc_footer: |-
   # SOURCE CODE
 
-  https://github.com/dannyben/rush-cli
+  https://github.com/dannyben/rush
 
   # ISSUE TRACKER
   
-  https://github.com/dannyben/rush-cli/issues
+  https://github.com/dannyben/rush/issues
 
 environment_variables:
 - name: rush_config

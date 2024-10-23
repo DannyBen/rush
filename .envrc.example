@@ -1,6 +1,6 @@
 # for git-changelog (https://github.com/dannyben/git-changelog)
-export CHANGELOG_COMMIT_URL=https://github.com/DannyBen/rush-cli/commit/%h
-export CHANGELOG_COMPARE_URL=https://github.com/dannyben/rush-cli/compare/%s
+export CHANGELOG_COMMIT_URL=https://github.com/DannyBen/rush/commit/%h
+export CHANGELOG_COMPARE_URL=https://github.com/dannyben/rush/compare/%s
 
 export RUSH_CONFIG=$PWD/rush-dev.ini
 PATH_add .

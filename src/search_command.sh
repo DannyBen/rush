@@ -11,10 +11,10 @@ search_repo() {
 
   ## Search directories matching search text
   blue "Matching packages:\n"
-  find "$repo_path" -type d | grep -v "$repo_path.*/\." |
+  find "$repo_path" -type d |
+    grep -v "$repo_path.*/\." |
     grep --color=always "$text" |
-    sed "s#${repo_path}/#${prefix}#g" |
-    sed 's#/info##'
+    sed "s#${repo_path}/#${prefix}#g"
 
   ## Search info files matching search text
   blue "\nMatching info files:\n"

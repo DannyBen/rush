@@ -1,15 +1,15 @@
-[34mMatching packages:
+[1mMatching packages (default):
 [0m
-[34m
-Matching info files:
+[1m
+Matching info files (default):
 [0m
 [35m[Khello[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
 [35m[Knested/hi[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
 
-[34mMatching packages:
+[1mMatching packages (sample):
 [0m
-[34m
-Matching info files:
+[1m
+Matching info files (sample):
 [0m
 [35m[Ksample:hello[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
 [35m[Ksample:nested/hi[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K

@@ -1,6 +1,6 @@
 % rush-edit(1) | Edit package files.
 % 
-% July 2024
+% October 2024
 
 NAME
 ==================================================

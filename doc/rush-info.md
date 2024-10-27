@@ -1,6 +1,6 @@
 % rush-info(1) | Show information about a package.
 % 
-% July 2024
+% October 2024
 
 NAME
 ==================================================

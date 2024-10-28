@@ -1,6 +1,14 @@
 Changelog
 ========================================
 
+v0.7.15 - 2024-10-28
+----------------------------------------
+
+- Rename repository from `rush-cli` to `rush` [`6698913`](https://github.com/DannyBen/rush/commit/6698913)
+- Fix search when `REPO_PATH` had a dot-dir [`951ae19`](https://github.com/DannyBen/rush/commit/951ae19)
+- Compare [`v0.7.14..v0.7.15`](https://github.com/dannyben/rush/compare/v0.7.14..v0.7.15)
+
+
 v0.7.14 - 2024-07-05
 ----------------------------------------
 

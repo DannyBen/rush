@@ -10,16 +10,18 @@ search_repo() {
   [[ "$repo" != "default" ]] && prefix="$repo:"
 
   ## Search directories matching search text
-  blue "Matching packages:\n"
-  find "$repo_path" -type d -not -path '*/\.*' | grep --color=always "$text" |
-    sed "s#${repo_path}/#${prefix}#g" | sed 's#/info##'
+  bold "Matching packages ($repo):\n"
+  find "$repo_path" -type f -name main |
+    sed "s#${repo_path}/#${prefix}#g; s#/main##" |
+    grep --color=always --ignore-case "$text" |
+    sort
 
   ## Search info files matching search text
-  blue "\nMatching info files:\n"
+  bold "\nMatching info files ($repo):\n"
   grep --color=always --initial-tab --recursive --ignore-case --include "info" \
     "$text" "$repo_path" |
-    sort |
-    sed "s#${repo_path}/#${prefix}#g" | sed 's#/info##'
+    sed "s#${repo_path}/#${prefix}#g; s#/info##" |
+    sort
 
   echo
 }

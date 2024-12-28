@@ -1,6 +1,6 @@
 % rush-search(1) | Search in package names and info files.
 % 
-% October 2024
+% December 2024
 
 NAME
 ==================================================

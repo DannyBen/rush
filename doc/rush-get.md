@@ -1,6 +1,6 @@
 % rush-get(1) | Install a package.
 % 
-% October 2024
+% December 2024
 
 NAME
 ==================================================

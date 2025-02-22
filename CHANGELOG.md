@@ -1,11 +1,11 @@
 Changelog
 ========================================
 
-0.7.17 - 2025-02-22
+v0.7.17 - 2025-02-22
 ----------------------------------------
 
 - Generate with bashly 1.2.10 [`5178efb`](https://github.com/DannyBen/rush/commit/5178efb)
-- Compare [`v0.7.16..0.7.17`](https://github.com/dannyben/rush/compare/v0.7.16..0.7.17)
+- Compare [`v0.7.16..v0.7.17`](https://github.com/dannyben/rush/compare/v0.7.16..v0.7.17)
 
 
 v0.7.16 - 2024-12-28

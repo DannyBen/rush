@@ -1,3 +1,5 @@
+# shellcheck disable=SC1003
+# Disabling single quote escape hint
 print_logo() {
   echo '_______                       ______  '
   echo '____  /  ___________  ___________  /_ '

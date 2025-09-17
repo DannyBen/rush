@@ -2,7 +2,7 @@ services:
   bash:
     build: .
     <<: &default
-      image: dannyben/rush
+      image: dannyben/rush-local
       environment: 
         LC_ALL: en_US.UTF-8 # consistent sort order
       volumes: 

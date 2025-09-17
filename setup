@@ -21,7 +21,7 @@ section() {
 
 sudo_copy() {
   printf "%s => %s\n" "$(blue "$(printf '%-25s' "$1")")" "$2"
-  
+
   if [[ -n "$3" ]]; then
     $sudo install -m "$3" "$1" "$2"
   else

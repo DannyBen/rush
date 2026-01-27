@@ -1,6 +1,6 @@
 % rush-completions(1) | Generate bash completions.
 % 
-% February 2025
+% January 2026
 
 NAME
 ==================================================

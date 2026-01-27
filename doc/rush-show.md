@@ -1,6 +1,6 @@
 % rush-show(1) | Show package files.
 % 
-% February 2025
+% January 2026
 
 NAME
 ==================================================
@@ -35,6 +35,16 @@ FILE
 
 File to show (show all if not specified).
 
+
+EXAMPLES
+==================================================
+
+~~~
+rush show docker
+
+rush show docker main
+
+~~~
 
 SEE ALSO
 ==================================================

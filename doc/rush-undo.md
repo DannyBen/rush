@@ -1,6 +1,6 @@
 % rush-undo(1) | Uninstall a package.
 % 
-% February 2025
+% January 2026
 
 NAME
 ==================================================

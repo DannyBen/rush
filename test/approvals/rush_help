@@ -11,31 +11,31 @@ _  /     /_/    \__,_/ /____/ /_/ /_/
   rush --version | -v
 
 [1mRepository Commands:[0m
-  add           Register a local repository.
-  remove        Unregister a local repository.
+  [32madd[0m           Register a local repository.
+  [32mremove[0m        Unregister a local repository.
 
 [1mGit Commands:[0m
-  clone         Clone a GitHub package repository.
-  pull          Git pull one or all repositories.
-  push          Git push one or all repositories.
+  [32mclone[0m         Clone a GitHub package repository.
+  [32mpull[0m          Git pull one or all repositories.
+  [32mpush[0m          Git push one or all repositories.
 
 [1mConfig Commands:[0m
-  config        Show or edit the configuration file.
-  default       Set a default repository.
+  [32mconfig[0m        Show or edit the configuration file.
+  [32mdefault[0m       Set a default repository.
 
 [1mPackage Commands:[0m
-  get           Install a package. (default)
-  undo          Uninstall a package.
-  snatch        Install a package from a remote repo.
-  copy          Copy a package between local repositories.
-  info          Show information about a package.
-  list          Show packages in one or all repositories.
-  search        Search in package names and info files.
-  edit          Edit package files.
-  show          Show package files.
+  [32mget[0m           Install a package. (default)
+  [32mundo[0m          Uninstall a package.
+  [32msnatch[0m        Install a package from a remote repo.
+  [32mcopy[0m          Copy a package between local repositories.
+  [32minfo[0m          Show information about a package.
+  [32mlist[0m          Show packages in one or all repositories.
+  [32msearch[0m        Search in package names and info files.
+  [32medit[0m          Edit package files.
+  [32mshow[0m          Show package files.
 
 [1mInternal Commands:[0m
-  completions   Generate bash completions.
+  [32mcompletions[0m   Generate bash completions.
 
 [1mOptions:[0m
   --help, -h

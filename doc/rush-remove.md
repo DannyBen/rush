@@ -1,6 +1,6 @@
 % rush-remove(1) | Unregister a local repository.
 % 
-% February 2025
+% January 2026
 
 NAME
 ==================================================

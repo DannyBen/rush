@@ -1,6 +1,14 @@
 Changelog
 ========================================
 
+v0.7.18 - 2026-01-27
+----------------------------------------
+
+- Improve setup with explicit permissions [`910a506`](https://github.com/DannyBen/rush/commit/910a506)
+- Colorize commands in usage [`624fb9e`](https://github.com/DannyBen/rush/commit/624fb9e)
+- Compare [`v0.7.17..v0.7.18`](https://github.com/dannyben/rush/compare/v0.7.17..v0.7.18)
+
+
 v0.7.17 - 2025-02-22
 ----------------------------------------
 

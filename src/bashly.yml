@@ -414,6 +414,10 @@ commands:
   - name: file
     help: File to show (show all if not specified).
 
+  examples:
+  - rush show docker
+  - rush show docker main
+
 - name: completions
   group: Internal
   help: Generate bash completions.

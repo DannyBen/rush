@@ -4,7 +4,7 @@ enable_deps_array: never
 
 usage_colors:
   caption: bold
-  # command: ~
+  command: green
   # arg: ~
   # flag: ~
   # environment_variable: ~

@@ -1,6 +1,6 @@
 % rush-add(1) | Register a local repository.
 % 
-% February 2025
+% January 2026
 
 NAME
 ==================================================

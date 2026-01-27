@@ -36,6 +36,16 @@ FILE
 File to show (show all if not specified).
 
 
+EXAMPLES
+==================================================
+
+~~~
+rush show docker
+
+rush show docker main
+
+~~~
+
 SEE ALSO
 ==================================================
 

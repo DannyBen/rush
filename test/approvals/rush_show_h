@@ -17,3 +17,7 @@ rush show - Show package files.
 
   FILE
     File to show (show all if not specified).
+
+[1mExamples:[0m
+  rush show docker
+  rush show docker main

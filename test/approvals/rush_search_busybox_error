@@ -1,3 +1,0 @@
-[31mcannot run with BusyBox grep.
-please install GNU grep:
-apk add --no-cache grep[0m

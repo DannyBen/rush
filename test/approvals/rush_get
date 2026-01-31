@@ -1,2 +1,6 @@
 missing required argument: PACKAGE
 usage: rush [get] PACKAGE [OPTIONS]
+examples:
+  rush ruby
+  rush get ruby --force
+  rush get centos:ruby

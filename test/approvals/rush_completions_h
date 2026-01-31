@@ -5,5 +5,5 @@ rush completions - Generate bash completions.
   rush completions --help | -h
 
 [1mOptions:[0m
-  --help, -h
+  [32m--help, -h[0m
     Show this help

@@ -1,2 +1,4 @@
 missing required argument: REPO
 usage: rush add REPO PATH
+examples:
+  rush add default ~/rush-repos/default

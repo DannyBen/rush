@@ -11,14 +11,14 @@ Alias: r
   rush remove --help | -h
 
 [1mOptions:[0m
-  --purge, -p
+  [32m--purge, -p[0m
     Also remove the local repository's directory.
 
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
 [1mArguments:[0m
-  REPO
+  [32mREPO[0m
     Repository name.
 
 [1mExamples:[0m

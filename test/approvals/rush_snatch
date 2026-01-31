@@ -1,2 +1,6 @@
 missing required argument: GITHUB_USER
 usage: rush snatch GITHUB_USER PACKAGE [OPTIONS]
+examples:
+  rush snatch james python
+  rush snatch james python --undo
+  rush snatch james/other-rush-repo python

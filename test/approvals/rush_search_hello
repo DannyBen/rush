@@ -4,7 +4,7 @@
 [1m
 Matching info files (default):
 [0m
-[35m[Khello[m[K[36m[K:[m[K	  $ rush info [01;31m[Khello[m[K
+[35m[Khello[m[K[36m[K:[m[K[32m[K8[m[K[36m[K:[m[K  $ rush info [01;31m[Khello[m[K
 
 [1mMatching packages (sample):
 [0m
@@ -12,4 +12,4 @@ sample:[01;31m[Khello[m[K
 [1m
 Matching info files (sample):
 [0m
-[35m[Ksample:hello[m[K[36m[K:[m[K	  $ rush info [01;31m[Khello[m[K
+[35m[Ksample:hello[m[K[36m[K:[m[K[32m[K8[m[K[36m[K:[m[K  $ rush info [01;31m[Khello[m[K

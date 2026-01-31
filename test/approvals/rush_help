@@ -38,19 +38,19 @@ _  /     /_/    \__,_/ /____/ /_/ /_/
   [32mcompletions[0m   Generate bash completions.
 
 [1mOptions:[0m
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
-  --version, -v
+  [32m--version, -v[0m
     Show version number
 
 [1mEnvironment Variables:[0m
-  RUSH_CONFIG
+  [32mRUSH_CONFIG[0m
     Location of the rush config file.
     
     Default: ~/rush.ini
 
-  RUSH_ROOT
+  [32mRUSH_ROOT[0m
     Location of the default base directory for cloning repositories.
     
     Default: ~/rush-repos

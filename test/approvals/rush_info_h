@@ -11,11 +11,11 @@ Alias: i
   rush info --help | -h
 
 [1mOptions:[0m
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
 [1mArguments:[0m
-  PACKAGE
+  [32mPACKAGE[0m
     Package name.
     
     This can either be the package name without the repository name (in this

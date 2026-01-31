@@ -1,2 +1,7 @@
 missing required argument: GITHUB_USER
 usage: rush clone GITHUB_USER [PATH] [OPTIONS]
+examples:
+  rush clone bobby
+  rush clone bobby --default
+  rush clone bobby/bobs-repo ./repos/bobby --ssh
+  rush clone bobby --name sample --ignore

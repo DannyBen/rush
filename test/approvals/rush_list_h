@@ -7,17 +7,17 @@ Alias: l, ls
   rush list --help | -h
 
 [1mOptions:[0m
-  --simple, -s
+  [32m--simple, -s[0m
     Show only package names.
 
-  --all, -a
+  [32m--all, -a[0m
     Show nested packages as well.
 
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
 [1mArguments:[0m
-  REPO_OR_PACKAGE
+  [32mREPO_OR_PACKAGE[0m
     Repository name or package name.
     
     Leave blank to show all packages in all repositories.

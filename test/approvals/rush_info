@@ -1,2 +1,5 @@
 missing required argument: PACKAGE
 usage: rush info PACKAGE
+examples:
+  rush info ruby
+  rush info centos:ruby

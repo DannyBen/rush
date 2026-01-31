@@ -5,20 +5,20 @@ rush copy - Copy a package between local repositories.
   rush copy --help | -h
 
 [1mOptions:[0m
-  --force, -f
+  [32m--force, -f[0m
     Copy the package even if it already exists in the target repository.
 
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
 [1mArguments:[0m
-  SOURCE_PACKAGE
+  [32mSOURCE_PACKAGE[0m
     Source package name.
     
     This can either be the package name without the repository name (in this
     case, the default repository will be used) or in the form of `repo:package`.
 
-  TARGET_PACKAGE
+  [32mTARGET_PACKAGE[0m
     Target package name.
     
     This can either be the package name without the repository name (in this

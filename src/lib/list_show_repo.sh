@@ -1,8 +1,8 @@
 list_show_repo() {
   local repo_or_package="$1"
-  local search="${args[--search]}"
-  local simple=${args[--simple]}
-  local all=${args[--all]}
+  local search="$2"
+  local simple="$3"
+  local all="$4"
   local repo="$repo_or_package"
   local package glob repo_path infofile regex package_name
 
@@ -33,7 +33,7 @@ list_show_repo() {
   if [[ ${glob[0]} =~ .*\*.* ]]; then
     infofile="$repo_path/$package/info"
     if [[ -f "$infofile" ]]; then
-      list_display_item "$package" "$infofile" "$repo"
+      list_display_item "$package" "$infofile" "$repo" "$simple"
     elif [[ ! $simple ]]; then
       red "nothing in $repo repo"
     fi
@@ -48,7 +48,7 @@ list_show_repo() {
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"
-        list_display_item "$package_name" "$infofile" "$repo"
+        list_display_item "$package_name" "$infofile" "$repo" "$simple"
       fi
     done
   fi

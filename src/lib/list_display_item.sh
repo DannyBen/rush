@@ -2,9 +2,9 @@ list_display_item() {
   local package="$1"
   local infofile="$2"
   local repo="$3"
-  local simple width
+  local simple="$4"
+  local width
 
-  simple=${args[--simple]}
   width=$((${COLUMNS:-80} + 9))
 
   [[ "$repo" != "default" ]] && package="$repo:$package"

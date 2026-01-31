@@ -20,6 +20,7 @@ rush - Personal package manager.
 
 [1mPackage Commands:[0m
   [32mget[0m           Install a package. (default)
+  [32mmenu[0m          Install a package using a menu.
   [32mundo[0m          Uninstall a package.
   [32msnatch[0m        Install a package from a remote repo.
   [32mcopy[0m          Copy a package between local repositories.

@@ -1,2 +1,5 @@
 missing required argument: PACKAGE
 usage: rush undo PACKAGE [OPTIONS]
+examples:
+  rush undo ruby
+  rush undo centos:ruby

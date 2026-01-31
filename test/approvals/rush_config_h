@@ -7,8 +7,8 @@ Alias: c
   rush config --help | -h
 
 [1mOptions:[0m
-  --edit, -e
+  [32m--edit, -e[0m
     Open the configuration file for editing.
 
-  --help, -h
+  [32m--help, -h[0m
     Show this help

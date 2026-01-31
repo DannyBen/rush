@@ -1,3 +1,7 @@
+commands_dir: commands
+show_examples_on_error: true
+strict: set -eo pipefail
+
 enable_view_markers: always
 enable_env_var_names_array: never
 enable_deps_array: never
@@ -5,6 +9,6 @@ enable_deps_array: never
 usage_colors:
   caption: bold
   command: green
-  # arg: ~
-  # flag: ~
-  # environment_variable: ~
+  arg: green
+  flag: green
+  environment_variable: green

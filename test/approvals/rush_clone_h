@@ -9,35 +9,35 @@ rush clone
   rush clone --help | -h
 
 [1mOptions:[0m
-  --ssh, -s
+  [32m--ssh, -s[0m
     Clone using SSH instead of HTTPS.
 
-  --default, -d
+  [32m--default, -d[0m
     Set this as the default repository (same as `--name default`).
 
-  --name, -n NAME
+  [32m--name, -n NAME[0m
     Name to use in the config file.
     
     Default: GitHub user
 
-  --shallow, -w
+  [32m--shallow, -w[0m
     Perform a shallow clone, instead of the default full clone.
 
-  --ignore, -i
+  [32m--ignore, -i[0m
     Ignore (do not clone) if a repository with this name exists.
 
-  --help, -h
+  [32m--help, -h[0m
     Show this help
 
 [1mArguments:[0m
-  GITHUB_USER
+  [32mGITHUB_USER[0m
     Github user.
     
     This user is expected to have a repository named `rush-repo`.
     
     If you need to use a different name, use the `user/repo` syntax.
 
-  PATH
+  [32mPATH[0m
     Local path to clone the repository into.
     
     Default: ~/rush-repos/<github_user>/<github_repo>

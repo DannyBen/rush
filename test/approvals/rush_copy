@@ -1,2 +1,6 @@
 missing required argument: SOURCE_PACKAGE
 usage: rush copy SOURCE_PACKAGE [TARGET_PACKAGE] [OPTIONS]
+examples:
+  rush copy james:python
+  rush copy james:python python3
+  rush copy james:python bobby:python3 --force

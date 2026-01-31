@@ -3,13 +3,13 @@
 [1m
 Matching info files (default):
 [0m
-[35m[Khello[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
-[35m[Knested/hi[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
+[35m[Khello[m[K[36m[K:[m[K[32m[K6[m[K[36m[K:[m[KThis info file can be accessed by [01;31m[Krunning[m[K
+[35m[Knested/hi[m[K[36m[K:[m[K[32m[K3[m[K[36m[K:[m[KThis info file can be accessed by [01;31m[Krunning[m[K
 
 [1mMatching packages (sample):
 [0m
 [1m
 Matching info files (sample):
 [0m
-[35m[Ksample:hello[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
-[35m[Ksample:nested/hi[m[K[36m[K:[m[K	This info file can be accessed by [01;31m[Krunning[m[K
+[35m[Ksample:hello[m[K[36m[K:[m[K[32m[K6[m[K[36m[K:[m[KThis info file can be accessed by [01;31m[Krunning[m[K
+[35m[Ksample:nested/hi[m[K[36m[K:[m[K[32m[K3[m[K[36m[K:[m[KThis info file can be accessed by [01;31m[Krunning[m[K

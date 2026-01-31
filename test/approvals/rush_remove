@@ -1,2 +1,5 @@
 missing required argument: REPO
 usage: rush remove REPO [OPTIONS]
+examples:
+  rush remove bobby
+  rush remove bobby --purge

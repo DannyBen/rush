@@ -233,11 +233,6 @@ commands:
   - rush get ruby --force
   - rush get centos:ruby 
 
-- name: menu
-  group: Package
-  dependencies: [fzf]
-  help: Install a package using a menu.
-
 - name: undo
   alias: u
   group: Package

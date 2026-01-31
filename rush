@@ -44,7 +44,6 @@ rush_usage() {
   echo
   printf "%s\n" "$(bold "Package Commands:")"
   printf "  %s   Install a package. (default)\n" "$(green "get")        "
-  printf "  %s   Install a package using a menu.\n" "$(green "menu")       "
   printf "  %s   Uninstall a package.\n" "$(green "undo")       "
   printf "  %s   Install a package from a remote repo.\n" "$(green "snatch")     "
   printf "  %s   Copy a package between local repositories.\n" "$(green "copy")       "
@@ -464,28 +463,6 @@ rush_get_usage() {
     printf "  rush ruby\n"
     printf "  rush get ruby --force\n"
     printf "  rush get centos:ruby\n"
-    echo
-
-  fi
-}
-
-# :command.usage
-rush_menu_usage() {
-  printf "rush menu - Install a package using a menu.\n\n"
-
-  printf "%s\n" "$(bold "Usage:")"
-  printf "  rush menu\n"
-  printf "  rush menu --help | -h\n"
-  echo
-
-  # :command.long_usage
-  if [[ -n "$long_usage" ]]; then
-    # :command.usage_options
-    printf "%s\n" "$(bold "Options:")"
-
-    # :command.usage_fixed_flags
-    printf "  %s\n" "$(green "--help, -h")"
-    printf "    Show this help\n"
     echo
 
   fi
@@ -1363,40 +1340,36 @@ send_completions() {
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -A directory -W "$(_rush_completions_filter "--default --help --ignore --name --shallow --ssh -d -h -i -n -s -w")" -- "$cur")'
   echo $'      ;;'
   echo $''
-  echo $'    \'list\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all --help --simple -a -h -s")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'info\'*)'
+  echo $'    \'edit\'*)'
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help -h")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'copy\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --force --help -f -h")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'undo\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help --verbose -h -v")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'menu\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--help -h")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'show\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help -h")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
-  echo $'    \'push\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all --chmod --help --message -a -h -m -x")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'    \'pull\'*)'
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--help -h")" -- "$cur")'
   echo $'      ;;'
   echo $''
-  echo $'    \'edit\'*)'
+  echo $'    \'push\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all --chmod --help --message -a -h -m -x")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'show\'*)'
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help -h")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'undo\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help --verbose -h -v")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'copy\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --force --help -f -h")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'info\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help -h")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'list\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all --help --simple -a -h -s")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'    \'get\'*)'
@@ -1411,12 +1384,12 @@ send_completions() {
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all --help --simple -a -h -s")" -- "$cur")'
   echo $'      ;;'
   echo $''
-  echo $'    \'s\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--help -h")" -- "$cur")'
-  echo $'      ;;'
-  echo $''
   echo $'    \'e\'*)'
   echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help -h")" -- "$cur")'
+  echo $'      ;;'
+  echo $''
+  echo $'    \'s\'*)'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--help -h")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'    \'l\'*)'
@@ -1452,7 +1425,7 @@ send_completions() {
   echo $'      ;;'
   echo $''
   echo $'    *)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help --version -h -v a add c clone completions config copy default download e edit g get i info l list ls menu p pull push r remove s search show snatch u undo update upload")" -- "$cur")'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "$(rush list -s -a) --help --version -h -v a add c clone completions config copy default download e edit g get i info l list ls p pull push r remove s search show snatch u undo update upload")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'  esac'
@@ -1679,17 +1652,6 @@ rush_get_command() {
   trap finish EXIT
 
   ./main
-
-}
-
-# :command.function
-rush_menu_command() {
-
-  # src/commands/menu.sh
-  echo "# This file is located at 'src/commands/menu.sh'."
-  echo "# It contains the implementation for the 'rush menu' command."
-  echo "# The code you write here will be wrapped by a function named 'rush_menu_command()'."
-  echo "# Feel free to edit this file; your changes will persist when regenerating."
 
 }
 
@@ -2038,13 +2000,6 @@ parse_requirements() {
       action="get"
       shift
       rush_get_parse_requirements "$@"
-      shift $#
-      ;;
-
-    menu)
-      action="menu"
-      shift
-      rush_menu_parse_requirements "$@"
       shift $#
       ;;
 
@@ -2791,65 +2746,6 @@ rush_get_parse_requirements() {
 }
 
 # :command.parse_requirements
-rush_menu_parse_requirements() {
-  local key
-
-  # :command.fixed_flags_filter
-  while [[ $# -gt 0 ]]; do
-    key="$1"
-    case "$key" in
-      --help | -h)
-        long_usage=yes
-        rush_menu_usage
-        exit
-        ;;
-
-      *)
-        break
-        ;;
-
-    esac
-  done
-
-  # :command.dependencies_filter
-  missing_deps=
-  # :dependency.filter
-  if ! command -v fzf >/dev/null 2>&1; then
-    printf "missing dependency: fzf\n" >&2
-    missing_deps=1
-  fi
-
-  if [[ -n $missing_deps ]]; then
-    exit 1
-  fi
-
-  # :command.command_filter
-  action="menu"
-
-  # :command.parse_requirements_while
-  while [[ $# -gt 0 ]]; do
-    key="$1"
-    case "$key" in
-
-      -?*)
-        printf "invalid option: %s\n" "$key" >&2
-        exit 1
-        ;;
-
-      *)
-        # :command.parse_requirements_case
-        # :command.parse_requirements_case_simple
-        printf "invalid argument: %s\n" "$key" >&2
-        exit 1
-
-        ;;
-
-    esac
-  done
-
-}
-
-# :command.parse_requirements
 rush_undo_parse_requirements() {
   local key
 
@@ -3502,7 +3398,6 @@ run() {
     "config") rush_config_command ;;
     "default") rush_default_command ;;
     "get") rush_get_command ;;
-    "menu") rush_menu_command ;;
     "undo") rush_undo_command ;;
     "snatch") rush_snatch_command ;;
     "copy") rush_copy_command ;;

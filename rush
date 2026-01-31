@@ -1078,6 +1078,84 @@ ini_keys() {
   for a in "${keys[@]}"; do echo "$a"; done | sort
 }
 
+# src/lib/list_display_item.sh
+list_display_item() {
+  local package="$1"
+  local infofile="$2"
+  local repo="$3"
+  local simple width
+
+  simple=${args[--simple]}
+  width=$((${COLUMNS:-80} + 9))
+
+  [[ "$repo" != "default" ]] && package="$repo:$package"
+  if [[ $simple ]]; then
+    printf "%s\n" "$package"
+  else
+    info=$(head -1 "$infofile" 2>/dev/null)
+    padded_package=$(printf "%-20s" "$package")
+    message="$(green "$padded_package")  $info"
+    printf "%.${width}s\n" "$message"
+  fi
+}
+
+# src/lib/list_show_repo.sh
+list_show_repo() {
+  local repo_or_package="$1"
+  local search="${args[--search]}"
+  local simple=${args[--simple]}
+  local all=${args[--all]}
+  local repo="$repo_or_package"
+  local package glob repo_path infofile regex package_name
+
+  if [[ $repo_or_package =~ (.*):(.*) ]]; then
+    repo=${BASH_REMATCH[1]}
+    package=${BASH_REMATCH[2]}
+  fi
+
+  repo_path=$(config_get "$repo")
+
+  if [[ ! $repo_path ]]; then
+    package="$repo"
+    repo="default"
+    repo_path=$(config_get "$repo")
+  fi
+
+  if [[ $package ]]; then
+    glob=("$repo_path"/"$package"/**/info)
+  else
+    if [[ $all ]]; then
+      glob_files=$(find "$repo_path" -type f -name 'info' | sort)
+    else
+      glob_files=$(find "$repo_path" -maxdepth 2 -type f -name 'info' | sort)
+    fi
+    readarray -t glob < <(echo "${glob_files[@]}")
+  fi
+
+  if [[ ${glob[0]} =~ .*\*.* ]]; then
+    infofile="$repo_path/$package/info"
+    if [[ -f "$infofile" ]]; then
+      list_display_item "$package" "$infofile" "$repo"
+    elif [[ ! $simple ]]; then
+      red "nothing in $repo repo"
+    fi
+
+  else
+    for infofile in "${glob[@]}"; do
+      if [[ $search ]]; then
+        regex="$repo_path/(.*${search}.*)/info"
+      else
+        regex="$repo_path/(.*)/info"
+      fi
+
+      if [[ $infofile =~ $regex ]]; then
+        package_name="${BASH_REMATCH[1]}"
+        list_display_item "$package_name" "$infofile" "$repo"
+      fi
+    done
+  fi
+}
+
 # src/lib/print_logo.sh
 # shellcheck disable=SC1003
 # Disabling single quote escape hint
@@ -1091,9 +1169,81 @@ print_logo() {
   echo
 }
 
+# src/lib/pull_repo.sh
+pull_repo() {
+  local repo_path="$1"
+  local repo="$2"
+
+  if [[ -d "$repo_path/.git" ]]; then
+    say "pull" "$repo"
+    (cd "$repo_path" && git pull)
+  else
+    say "pull" "skipping $repo (not a git repo)"
+  fi
+}
+
+# src/lib/push_repo.sh
+push_repo() {
+  local repo_path="$1"
+  local repo="$2"
+
+  if [[ -d "$repo_path/.git" ]]; then
+    say "push" "$repo"
+    (
+      set -e
+      cd "$repo_path"
+
+      say "push" "$repo: adding files"
+      git add . --all
+
+      if [[ -n "${args[--chmod]}" ]]; then
+        say "push" "$repo: applying chmod +x"
+        git ls-files | grep -E "undo|main" | xargs -I {} git update-index --chmod +x {}
+      fi
+      say "push" "$repo: committing"
+      git commit -am "$message"
+
+      say "push" "$repo: pushing"
+      git push
+    )
+  else
+    say "push" "$repo: skipping (not a git repo)"
+  fi
+}
+
 # src/lib/say.sh
 say() {
   printf "%-20s | %s\n" "$(magenta "$1")" "$(bold "${*:2}")"
+}
+
+# src/lib/search_repo.sh
+search_repo() {
+  repo="$1"
+  text="$2"
+  set +e
+
+  repo_path=$(config_get "$repo")
+
+  prefix=''
+  [[ "$repo" != "default" ]] && prefix="$repo:"
+
+  grep_color_flag=""
+  if grep --help 2>&1 | grep -q -- "--color"; then
+    grep_color_flag="--color=always"
+  fi
+
+  bold "Matching packages ($repo):\n"
+  find "$repo_path" -type f -name main |
+    sed "s#${repo_path}/#${prefix}#g; s#/main##" |
+    grep $grep_color_flag --ignore-case -- "$text" |
+    sort
+
+  bold "\nMatching info files ($repo):\n"
+  find "$repo_path" -type f -name info -exec grep $grep_color_flag --ignore-case -n -- "$text" {} + |
+    sed "s#${repo_path}/#${prefix}#g; s#/info##" |
+    sort
+
+  echo
 }
 
 # src/lib/send_completions.sh
@@ -1391,18 +1541,6 @@ rush_pull_command() {
   # src/commands/pull.sh
   repo=${args[repo]}
 
-  pull_repo() {
-    local repo_path="$1"
-    local repo="$2"
-
-    if [[ -d "$repo_path/.git" ]]; then
-      say "pull" "$repo"
-      (cd "$repo_path" && git pull)
-    else
-      say "pull" "skipping $repo (not a git repo)"
-    fi
-  }
-
   if [[ $repo ]]; then
     repo_path=$(config_get "$repo")
     [[ $repo_path ]] || abort "no such repo: $repo"
@@ -1423,34 +1561,6 @@ rush_push_command() {
   all=${args[--all]}
   repo=${args[repo]:-default}
   message=${args[--message]:-"automatic commit"}
-
-  push_repo() {
-    local repo_path="$1"
-    local repo="$2"
-
-    if [[ -d "$repo_path/.git" ]]; then
-      say "push" "$repo"
-      (
-        set -e
-        cd "$repo_path"
-
-        say "push" "$repo: adding files"
-        git add . --all
-
-        if [[ -n "${args[--chmod]}" ]]; then
-          say "push" "$repo: applying chmod +x"
-          git ls-files | grep -E "undo|main" | xargs -I {} git update-index --chmod +x {}
-        fi
-        say "push" "$repo: committing"
-        git commit -am "$message"
-
-        say "push" "$repo: pushing"
-        git push
-      )
-    else
-      say "push" "$repo: skipping (not a git repo)"
-    fi
-  }
 
   if [[ $all ]]; then
     for k in $(config_keys); do
@@ -1706,80 +1816,6 @@ rush_info_command() {
 rush_list_command() {
 
   # src/commands/list.sh
-  list_display_item() {
-    package="$1"
-    infofile="$2"
-    repo="$3"
-    simple=${args[--simple]}
-    width=$((${COLUMNS:-80} + 9))
-
-    [[ "$repo" != "default" ]] && package="$repo:$package"
-    if [[ $simple ]]; then
-      printf "%s\n" "$package"
-    else
-      info=$(head -1 "$infofile" 2>/dev/null)
-      padded_package=$(printf "%-20s" "$package")
-      message="$(green "$padded_package")  $info"
-      printf "%.${width}s\n" "$message"
-    fi
-  }
-
-  list_show_repo() {
-    local repo_or_package="$1"
-    local search="${args[--search]}"
-    local simple=${args[--simple]}
-    local all=${args[--all]}
-    local repo="$repo_or_package"
-    local package glob repo_path infofile regex package_name
-
-    if [[ $repo_or_package =~ (.*):(.*) ]]; then
-      repo=${BASH_REMATCH[1]}
-      package=${BASH_REMATCH[2]}
-    fi
-
-    repo_path=$(config_get "$repo")
-
-    if [[ ! $repo_path ]]; then
-      package="$repo"
-      repo="default"
-      repo_path=$(config_get "$repo")
-    fi
-
-    if [[ $package ]]; then
-      glob=("$repo_path"/"$package"/**/info)
-    else
-      if [[ $all ]]; then
-        glob_files=$(find "$repo_path" -type f -name 'info' | sort)
-      else
-        glob_files=$(find "$repo_path" -maxdepth 2 -type f -name 'info' | sort)
-      fi
-      readarray -t glob < <(echo "${glob_files[@]}")
-    fi
-
-    if [[ ${glob[0]} =~ .*\*.* ]]; then
-      infofile="$repo_path/$package/info"
-      if [[ -f "$infofile" ]]; then
-        list_display_item "$package" "$infofile" "$repo"
-      elif [[ ! $simple ]]; then
-        red "nothing in $repo repo"
-      fi
-
-    else
-      for infofile in "${glob[@]}"; do
-        if [[ $search ]]; then
-          regex="$repo_path/(.*${search}.*)/info"
-        else
-          regex="$repo_path/(.*)/info"
-        fi
-
-        if [[ $infofile =~ $regex ]]; then
-          package_name="${BASH_REMATCH[1]}"
-          list_display_item "$package_name" "$infofile" "$repo"
-        fi
-      done
-    fi
-  }
-
   repo_or_package=${args[repo_or_package]}
 
   if [[ $repo_or_package ]]; then
@@ -1796,35 +1832,6 @@ rush_list_command() {
 rush_search_command() {
 
   # src/commands/search.sh
-  search_repo() {
-    repo="$1"
-    text="$2"
-    set +e
-
-    repo_path=$(config_get "$repo")
-
-    prefix=''
-    [[ "$repo" != "default" ]] && prefix="$repo:"
-
-    grep_color_flag=""
-    if grep --help 2>&1 | grep -q -- "--color"; then
-      grep_color_flag="--color=always"
-    fi
-
-    bold "Matching packages ($repo):\n"
-    find "$repo_path" -type f -name main |
-      sed "s#${repo_path}/#${prefix}#g; s#/main##" |
-      grep $grep_color_flag --ignore-case -- "$text" |
-      sort
-
-    bold "\nMatching info files ($repo):\n"
-    find "$repo_path" -type f -name info -exec grep $grep_color_flag --ignore-case -n -- "$text" {} + |
-      sed "s#${repo_path}/#${prefix}#g; s#/info##" |
-      sort
-
-    echo
-  }
-
   text=${args[text]}
 
   for k in $(config_keys); do

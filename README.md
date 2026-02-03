@@ -9,9 +9,9 @@ _  /     /_/    \__,_/ /____/ /_/ /_/
 /_/      Personal Package Manager     
 ```
 
-[![Build Status](https://github.com/DannyBen/rush/workflows/Test/badge.svg)](https://github.com/DannyBen/rush/actions?query=workflow%3ATest)
-
 ---
+
+![repocard](repocard.svg)
 
 Rush is a bash script that executes other scripts (bash or other languages)
 from compatible GitHub repositories or local folders. It provides a simple

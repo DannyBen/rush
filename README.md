@@ -11,7 +11,7 @@ _  /     /_/    \__,_/ /____/ /_/ /_/
 
 ---
 
-![repocard](repocard.svg)
+![repocard](https://repocard.dannyben.com/svg/rush.svg)
 
 Rush is a bash script that executes other scripts (bash or other languages)
 from compatible GitHub repositories or local folders. It provides a simple

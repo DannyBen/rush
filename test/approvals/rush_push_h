@@ -14,10 +14,6 @@ Alias: upload
     Commit message.
     Default: automatic commit
 
-  [32m--chmod, -x[0m
-    Apply the executable bit to all main and undo scripts in the git repository
-    index.
-
   [32m--help, -h[0m
     Show this help
 

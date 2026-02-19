@@ -316,11 +316,6 @@ rush_push_usage() {
     printf "    %s\n" "Default: automatic commit"
     echo
 
-    # :flag.usage
-    printf "  %s\n" "$(green "--chmod, -x")"
-    printf "    Apply the executable bit to all main and undo scripts in the git repository\n    index.\n"
-    echo
-
     # :command.usage_fixed_flags
     printf "  %s\n" "$(green "--help, -h")"
     printf "    Show this help\n"
@@ -1197,9 +1192,16 @@ push_repo() {
       say "push" "$repo: adding files"
       git add . --all
 
-      if [[ -n "${args[--chmod]}" ]]; then
-        say "push" "$repo: applying chmod +x"
-        git ls-files | grep -E "undo|main" | xargs -I {} git update-index --chmod +x {}
+      added_exec_files="$(git diff --cached --name-only --diff-filter=A -- \
+        ':(glob)**/main' \
+        ':(glob)**/undo' \
+        'main' \
+        'undo')"
+      if [[ -n "$added_exec_files" ]]; then
+        say "push" "$repo: applying chmod +x to new main/undo files"
+        while IFS= read -r file; do
+          git update-index --chmod=+x "$file"
+        done <<< "$added_exec_files"
       fi
       say "push" "$repo: committing"
       git commit -am "$message"
@@ -1325,7 +1327,7 @@ send_completions() {
   echo $'      ;;'
   echo $''
   echo $'    \'upload\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--chmod" "--help" "--message" "-a" "-h" "-m" "-x")" -- "$cur")'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--help" "--message" "-a" "-h" "-m")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'    \'update\'*)'
@@ -1349,7 +1351,7 @@ send_completions() {
   echo $'      ;;'
   echo $''
   echo $'    \'push\'*)'
-  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--chmod" "--help" "--message" "-a" "-h" "-m" "-x")" -- "$cur")'
+  echo $'      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--help" "--message" "-a" "-h" "-m")" -- "$cur")'
   echo $'      ;;'
   echo $''
   echo $'    \'show\'*)'
@@ -2502,14 +2504,6 @@ rush_push_parse_requirements() {
           printf "%s\n" "--message requires an argument: --message, -m TEXT" >&2
           exit 1
         fi
-        ;;
-
-      # :flag.case
-      --chmod | -x)
-
-        # :flag.case_no_arg
-        args['--chmod']=1
-        shift
         ;;
 
       -?*)

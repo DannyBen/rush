@@ -74,7 +74,7 @@ _rush_completions() {
       ;;
 
     'upload'*)
-      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--chmod" "--help" "--message" "-a" "-h" "-m" "-x")" -- "$cur")
+      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--help" "--message" "-a" "-h" "-m")" -- "$cur")
       ;;
 
     'update'*)
@@ -98,7 +98,7 @@ _rush_completions() {
       ;;
 
     'push'*)
-      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--chmod" "--help" "--message" "-a" "-h" "-m" "-x")" -- "$cur")
+      while read -r; do COMPREPLY+=("$REPLY"); done < <(compgen -W "$(_rush_completions_filter "--all" "--help" "--message" "-a" "-h" "-m")" -- "$cur")
       ;;
 
     'show'*)

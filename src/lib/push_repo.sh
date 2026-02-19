@@ -12,11 +12,7 @@ push_repo() {
       git add . --all
       
       local added_exec_files
-      added_exec_files="$(git diff --cached --name-only --diff-filter=A -- \
-        ':(glob)**/main' \
-        ':(glob)**/undo' \
-        'main' \
-        'undo')"
+      added_exec_files="$(git diff --cached --name-only --diff-filter=A -- ':(glob)**/main' ':(glob)**/undo')"
       if [[ -n "$added_exec_files" ]]; then
         say "push" "$repo: applying chmod +x to new main/undo files"
         while IFS= read -r exec_file; do

@@ -11,9 +11,13 @@ push_repo() {
       say "push" "$repo: adding files"
       git add . --all
       
-      if [[ -n "${args[--chmod]}" ]]; then
-        say "push" "$repo: applying chmod +x"
-        git ls-files | grep -E "undo|main" | xargs -I {} git update-index --chmod +x {}
+      local added_exec_files
+      added_exec_files="$(git diff --cached --name-only --diff-filter=A -- ':(glob)**/main' ':(glob)**/undo')"
+      if [[ -n "$added_exec_files" ]]; then
+        say "push" "$repo: applying chmod +x to new main/undo files"
+        while IFS= read -r exec_file; do
+          git update-index --chmod=+x "$exec_file"
+        done <<<"$added_exec_files"
       fi
       say "push" "$repo: committing"
       git commit -am "$message"

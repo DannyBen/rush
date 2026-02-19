@@ -159,10 +159,6 @@ commands:
     help: Commit message.
     default: automatic commit
 
-  - long: --chmod
-    short: -x
-    help: Apply the executable bit to all main and undo scripts in the git repository index.
-
 - name: config
   alias: c
   group: Config

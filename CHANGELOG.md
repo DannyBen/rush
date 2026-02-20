@@ -1,6 +1,15 @@
 Changelog
 ========================================
 
+v0.7.19 - 2026-02-20
+----------------------------------------
+
+- Internal refactor and search improvements [`ca5cabf`](https://github.com/DannyBen/rush/commit/ca5cabf)
+- Move functions to lib [`02d8ff4`](https://github.com/DannyBen/rush/commit/02d8ff4)
+- Remove --chmod flag from push command [`065dd2f`](https://github.com/DannyBen/rush/commit/065dd2f)
+- Compare [`v0.7.18..v0.7.19`](https://github.com/dannyben/rush/compare/v0.7.18..v0.7.19)
+
+
 v0.7.18 - 2026-01-27
 ----------------------------------------
 

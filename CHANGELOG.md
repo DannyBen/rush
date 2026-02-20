@@ -1,6 +1,13 @@
 Changelog
 ========================================
 
+v0.7.20 - 2026-02-20
+----------------------------------------
+
+- Fix completions (broken by completely 0.7.4) [`db6765d`](https://github.com/DannyBen/rush/commit/db6765d)
+- Compare [`v0.7.19..v0.7.20`](https://github.com/dannyben/rush/compare/v0.7.19..v0.7.20)
+
+
 v0.7.19 - 2026-02-20
 ----------------------------------------
 

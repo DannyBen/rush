@@ -1,6 +1,6 @@
 % rush-clone(1) | Clone a GitHub package repository.
 % 
-% January 2026
+% February 2026
 
 NAME
 ==================================================

@@ -1,6 +1,6 @@
 name: rush
 help: Personal package manager.
-version: 0.7.18
+version: 0.7.19
 help_header_override: print_logo
 completions: [$(rush list -s -a)]
 

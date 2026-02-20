@@ -1,6 +1,6 @@
 % rush-push(1) | Git push one or all repositories.
 % 
-% January 2026
+% February 2026
 
 NAME
 ==================================================
@@ -44,12 +44,6 @@ Push all repositories.
 Commit message.
 
 - Default Value: **automatic commit**
-
---chmod, -x
---------------------------------------------------
-
-Apply the executable bit to all main and undo scripts in the git repository index.
-
 
 DEPENDENCIES
 ==================================================

@@ -55,10 +55,21 @@ resolve_uninstall_permissions() {
 
 use_sudo_for_dir() {
   local dir="$1"
-  if [[ $EUID -ne 0 && ! -w "$dir" ]]; then
-    printf '1'
-  else
+  if [[ $EUID -eq 0 ]]; then
     printf '0'
+    return
+  fi
+
+  # Prefer sudo for system-path operations when available.
+  if sudo_usable; then
+    printf '1'
+    return
+  fi
+
+  if [[ -w "$dir" ]]; then
+    printf '0'
+  else
+    printf '1'
   fi
 }
 

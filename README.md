@@ -38,8 +38,7 @@ Rush was developed using the [Bashly Command Line Framework][bashly].
 
 ### Installing using the setup script
 
-This setup script will download the rush executable to `/usr/local/bin/` and
-install an autocomplete script in the bash completions directory.
+Use the setup script to install `rush`.
 
 ```shell
 $ curl -Ls get.dannyb.co/rush/setup | bash
@@ -53,11 +52,11 @@ Feel free to inspect the [setup script](setup) before running.
 Download the [rush](rush) script to `/usr/local/bin/` or anywhere in your
 `PATH`, and make it executable.
 
-If you wish to have all package name auto-completed for all `rush` commands, 
-add this line to your startup script (for example: `~/.bashrc`):
+If you wish to enable shell completions manually:
 
 ```bash
-complete -W '$(rush list -s)' rush
+mkdir -p ~/.local/share/bash-completion/completions
+echo 'eval "$(rush completions)"' > ~/.local/share/bash-completion/completions/rush
 ```
 
 

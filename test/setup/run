@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(pwd)"
+LOG_DIR="$ROOT_DIR/test/tmp/setup"
+IMAGE="rush-setup-test"
+
+[[ -f "$ROOT_DIR/rush" && -f "$ROOT_DIR/setup" && -f "$ROOT_DIR/test/setup/Dockerfile" ]] || {
+  echo "Run this script from the rush repo root." >&2
+  exit 1
+}
+
+mkdir -p "$LOG_DIR"
+
+docker build -t "$IMAGE" -f "$ROOT_DIR/test/setup/Dockerfile" "$ROOT_DIR/test/setup"
+
+docker run --rm -v "$ROOT_DIR:/repo" "$IMAGE" bash /repo/test/setup/cases.sh | tee "$LOG_DIR/run.log"

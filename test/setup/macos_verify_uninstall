@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+test ! -e /usr/local/bin/rush
+
+# Man pages should be removed from system install location.
+shopt -s nullglob
+man_files=(/usr/local/share/man/man1/rush*.1)
+shopt -u nullglob
+test "${#man_files[@]}" -eq 0
+
+# Completions should be removed from known locations.
+test ! -e /usr/local/share/bash-completion/completions/rush
+test ! -e /usr/local/etc/bash_completion.d/rush
+test ! -e "$(brew --prefix)/etc/bash_completion.d/rush"

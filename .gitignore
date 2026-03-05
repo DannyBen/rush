@@ -2,4 +2,5 @@
 /repos
 /rush-dev.ini
 /tmp
+/test/tmp
 .aider*

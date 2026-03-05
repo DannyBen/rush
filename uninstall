@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# === Private helpers ===
+
 print_in_color() {
   local color="$1"
   shift
@@ -11,7 +13,6 @@ print_in_color() {
 }
 
 red() { print_in_color "\e[31m" "$*"; }
-green() { print_in_color "\e[32m" "$*"; }
 green_bold() { print_in_color "\e[1;32m" "$*"; }
 blue() { print_in_color "\e[34m" "$*"; }
 
@@ -19,78 +20,176 @@ section() {
   printf "\n=== %s\n" "$(green_bold "$@")"
 }
 
-command_exist() {
-  [[ -x "$(command -v "$1")" ]]
-}
-
-rm_executable() {
-  if [[ -z "$1" ]]; then return; fi
-
-  printf "%s %s\n" "$(blue rm)" "$1"
-  $sudo rm -f "/usr/local/bin/$1"
-
-  if command_exist "$1"; then
-    fail "Command $1 still exists"
-  fi
-}
-
-rm_man() {
-  if [[ ! -d "/usr/local/share/man/man1/" ]]; then return; fi
-  if [[ -z "$1" ]]; then return; fi
-
-  printf "%s %s\n" "$(blue rm)" "/usr/local/share/man/man1/$1*.1"
-  $sudo rm -f /usr/local/share/man/man1/"$1"*.1
-
-  if command_exist makewhatis; then
-    $sudo makewhatis /usr/local/man
-  fi
-}
-
-rm_completions() {
-  if [[ -z "$1" ]]; then return; fi
-
-  if [[ -d "/usr/share/bash-completion/completions" ]]; then
-    compdir="/usr/share/bash-completion/completions"
-  elif [[ -d "/usr/local/etc/bash_completion.d" ]]; then
-    compdir="/usr/local/etc/bash_completion.d"
-  else
-    compdir=''
-  fi
-  
-  if [[ -n $compdir ]]; then
-    file="$compdir/$1"
-    printf "%s %s\n" "$(blue rm)" "$file"
-    $sudo rm -f "$file"
-  fi
-}
-
-onerror() {
-  local exit_status=$?
-  printf "\n=== %s\n" "$(red "Aborted with exit status $exit_status")"
-  exit $exit_status
-}
+command_exist() { [[ -x "$(command -v "$1")" ]]; }
 
 fail() {
   printf "$(red 'ERR') %s\n" "$*"
   return 1
 }
 
+warn() {
+  printf "$(red 'WARN') %s\n" "$*"
+}
+
+onerror() {
+  local exit_status=$?
+  printf "\n=== %s\n" "$(red "Aborted with exit status $exit_status")"
+  exit "$exit_status"
+}
+
+is_writable_dir() {
+  [[ -d "$1" && -w "$1" ]]
+}
+
+sudo_usable() {
+  command_exist sudo && sudo -n true >/dev/null 2>&1
+}
+
+resolve_uninstall_permissions() {
+  can_touch_system_paths=0
+
+  if [[ $EUID -eq 0 ]] || is_writable_dir "/usr/local/bin" || sudo_usable; then
+    can_touch_system_paths=1
+  fi
+}
+
+use_sudo_for_dir() {
+  local dir="$1"
+  if [[ $EUID -ne 0 && ! -w "$dir" ]]; then
+    printf '1'
+  else
+    printf '0'
+  fi
+}
+
+remove_file() {
+  local use_sudo="$1"
+  local file="$2"
+
+  [[ -n "$file" ]] || return
+  printf "%s %s\n" "$(blue rm)" "$file"
+
+  if [[ "$use_sudo" == "1" ]]; then
+    sudo rm -f "$file"
+  else
+    rm -f "$file"
+  fi
+}
+
+completion_system_dirs() {
+  local dirs=()
+
+  [[ -d "/usr/local/share/bash-completion/completions" ]] && dirs+=("/usr/local/share/bash-completion/completions")
+  [[ -d "/usr/local/etc/bash_completion.d" ]] && dirs+=("/usr/local/etc/bash_completion.d")
+  [[ -d "/usr/share/bash-completion/completions" ]] && dirs+=("/usr/share/bash-completion/completions")
+
+  if command_exist brew; then
+    local brew_compdir
+    brew_compdir="$(brew --prefix 2>/dev/null)/etc/bash_completion.d"
+    [[ -n "$brew_compdir" && -d "$brew_compdir" ]] && dirs+=("$brew_compdir")
+  fi
+
+  printf '%s\n' "${dirs[@]}"
+}
+
+remove_man_from_root() {
+  local root="$1"
+  local use_sudo="$2"
+  local name="$3"
+
+  [[ -d "$root" ]] || return
+
+  shopt -s nullglob
+  local man_dir section files file
+  for man_dir in "$root"/man*; do
+    [[ -d "$man_dir" ]] || continue
+    section="${man_dir##*/man}"
+    [[ -n "$section" ]] || continue
+    files=("$man_dir/${name}"*."$section")
+    for file in "${files[@]}"; do
+      remove_file "$use_sudo" "$file"
+    done
+  done
+  shopt -u nullglob
+}
+
+# === Public DSL ===
+
 initialize() {
   set -e
   trap 'onerror' ERR
+  resolve_uninstall_permissions
+}
 
-  # Figure out if we need sudo or not
-  sudo=''
-  if [[ $EUID -ne 0 ]]; then
-    sudo='sudo'
+uninstall_executable() {
+  local name="${1:?missing executable name}"
+
+  local user_bin="${HOME}/.local/bin/${name}"
+  local system_bin="/usr/local/bin/${name}"
+  [[ -e "$user_bin" ]] && remove_file 0 "$user_bin"
+
+  if [[ $can_touch_system_paths -eq 1 ]]; then
+    local use_sudo
+    use_sudo="$(use_sudo_for_dir "/usr/local/bin")"
+    remove_file "$use_sudo" "$system_bin"
+  else
+    [[ -e "$system_bin" ]] && warn "Skipping system binary removal (sudo unavailable and /usr/local/bin not writable)"
+  fi
+
+  if [[ -e "$system_bin" || -e "$user_bin" ]]; then
+    fail "Executable $name still exists in expected install locations"
+  fi
+
+  # Clear command hash and warn (not fail) if another executable shadows this name.
+  hash -r 2>/dev/null || true
+  if command_exist "$name"; then
+    warn "Another '$name' command is still available at $(command -v "$name")"
   fi
 }
+
+uninstall_man() {
+  local name="${1:?missing man base name}"
+
+  remove_man_from_root "${XDG_DATA_HOME:-$HOME/.local/share}/man" 0 "$name"
+
+  if [[ $can_touch_system_paths -eq 1 ]]; then
+    local use_sudo
+    use_sudo="$(use_sudo_for_dir "/usr/local/share/man")"
+    remove_man_from_root "/usr/local/share/man" "$use_sudo" "$name"
+
+    if command_exist makewhatis; then
+      if [[ "$use_sudo" == "1" ]]; then
+        sudo makewhatis /usr/local/man
+      else
+        makewhatis /usr/local/man
+      fi
+    fi
+  fi
+}
+
+uninstall_completions() {
+  local name="${1:?missing completion name}"
+
+  local user_compdir="${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions"
+  [[ -d "$user_compdir" ]] && remove_file 0 "$user_compdir/$name"
+
+  if [[ $can_touch_system_paths -eq 1 ]]; then
+    local compdir use_sudo
+    while IFS= read -r compdir; do
+      [[ -n "$compdir" ]] || continue
+      use_sudo="$(use_sudo_for_dir "$compdir")"
+      remove_file "$use_sudo" "$compdir/$name"
+    done < <(completion_system_dirs)
+  fi
+}
+
+# === Run ===
 
 initialize
 
 section "Removing files"
-rm_executable 'rush'
-rm_man 'rush'
-rm_completions 'rush'
+uninstall_executable "rush"
+uninstall_man "rush"
+uninstall_completions "rush"
 
 section "Done"

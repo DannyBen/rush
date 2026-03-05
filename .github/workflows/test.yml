@@ -11,27 +11,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Run shellcheck tests
-      run: shellcheck rush setup
+      run: shellcheck rush setup uninstall test/setup/run test/setup/cases.sh test/setup/macos_verify_install test/setup/macos_verify_uninstall
     - name: Build container for approval tests
       run: docker compose build
     - name: Run approval tests
       run: docker compose run ci
 
-  ubuntu_setup:
-    name: Setup on Ubuntu
+  ubuntu_setup_uninstall:
+    name: Setup/Uninstall (Ubuntu)
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Run setup
-      run: ./setup
-    - name: Test setup artifacts
-      run: test/setup_artifacts
-    - name: Run uninstall
-      run: ./uninstall
+    - name: Run setup/uninstall matrix in Docker
+      run: bash test/setup/run
 
-  macos_setup:
-    name: Setup on macOS
+  macos_setup_uninstall:
+    name: Setup/Uninstall (macOS)
     runs-on: macos-latest
     steps:
     - name: Checkout code
@@ -40,10 +36,12 @@ jobs:
       run: brew install bash
     - name: Run setup
       run: ./setup
-    - name: Test setup artifacts
-      run: test/setup_artifacts
+    - name: Verify installed artifacts
+      run: bash test/setup/macos_verify_install
     - name: Run uninstall
       run: ./uninstall
+    - name: Verify uninstall removed executable
+      run: bash test/setup/macos_verify_uninstall
 
   static_analysis:
     name: Static analysis

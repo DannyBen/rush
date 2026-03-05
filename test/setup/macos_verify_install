@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+command -v rush
+test -x /usr/local/bin/rush
+
+test -f /usr/local/share/man/man1/rush.1
+test -f /usr/local/share/man/man1/rush-get.1
+
+if [[ -f /usr/local/share/bash-completion/completions/rush ]]; then
+  test -s /usr/local/share/bash-completion/completions/rush
+elif [[ -f /usr/local/etc/bash_completion.d/rush ]]; then
+  test -s /usr/local/etc/bash_completion.d/rush
+elif [[ -f "$(brew --prefix)/etc/bash_completion.d/rush" ]]; then
+  test -s "$(brew --prefix)/etc/bash_completion.d/rush"
+else
+  echo "No completions artifact found in known macOS locations" >&2
+  exit 1
+fi

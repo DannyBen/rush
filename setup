@@ -51,7 +51,6 @@ sudo_usable() {
 
 resolve_install_targets() {
   prefix=''
-  sudo_cmd=''
   install_mode=''
 
   local user_bin="${HOME}/.local/bin"
@@ -64,7 +63,6 @@ resolve_install_targets() {
 
   if sudo_usable; then
     prefix="/usr/local"
-    sudo_cmd='sudo'
     install_mode="system"
     return 0
   fi
@@ -96,6 +94,40 @@ resolve_install_targets() {
   printf '%s\n' "      export PATH=\"\$HOME/.local/bin:\$PATH\""
   printf "Then run setup again.\n"
   return 1
+}
+
+command_prefix_for_target() {
+  local target="$1"
+  local dir="$target"
+
+  [[ -d "$dir" ]] || dir="$(dirname "$target")"
+
+  if [[ $EUID -eq 0 || -w "$dir" ]]; then
+    printf ''
+    return 0
+  fi
+
+  if sudo_usable; then
+    printf 'sudo'
+    return 0
+  fi
+
+  fail "Permission denied for $dir and sudo is unavailable"
+  return 1
+}
+
+ensure_dir() {
+  local dir="$1"
+  [[ -d "$dir" ]] && return
+
+  local cmd_prefix
+  cmd_prefix="$(command_prefix_for_target "$dir")"
+
+  if [[ -n "$cmd_prefix" ]]; then
+    sudo mkdir -p "$dir"
+  else
+    mkdir -p "$dir"
+  fi
 }
 
 completion_dir_for_mode() {
@@ -131,13 +163,19 @@ copy_file() {
   local source="$1"
   local dest_dir="$2"
   local mode="$3"
+  local cmd_prefix
 
   printf "%s => %s\n" "$(blue "$(printf '%-25s' "$source")")" "$dest_dir"
+  cmd_prefix="$(command_prefix_for_target "$dest_dir")"
 
-  if [[ -n "$mode" ]]; then
-    $sudo_cmd install -m "$mode" "$source" "$dest_dir"
+  if [[ -n "$cmd_prefix" && -n "$mode" ]]; then
+    sudo install -m "$mode" "$source" "$dest_dir"
+  elif [[ -n "$cmd_prefix" ]]; then
+    sudo install "$source" "$dest_dir"
+  elif [[ -n "$mode" ]]; then
+    install -m "$mode" "$source" "$dest_dir"
   else
-    $sudo_cmd install "$source" "$dest_dir"
+    install "$source" "$dest_dir"
   fi
 }
 
@@ -155,7 +193,6 @@ print_target_summary() {
     printf "completions: (not found)\n"
   fi
 }
-
 
 # === Public DSL ===
 
@@ -201,7 +238,7 @@ install_man() {
     section_id="${file##*.}"
     if [[ "$install_mode" == "system" ]]; then
       man_dir="/usr/local/share/man/man${section_id}"
-      [[ -d "$man_dir" ]] || $sudo_cmd mkdir -p "$man_dir"
+      ensure_dir "$man_dir"
     else
       man_dir="${XDG_DATA_HOME:-$HOME/.local/share}/man/man${section_id}"
       mkdir -p "$man_dir"
@@ -211,7 +248,11 @@ install_man() {
   done
 
   if [[ "$install_mode" == "system" ]] && command_exist makewhatis; then
-    $sudo_cmd makewhatis /usr/local/man
+    if [[ -n "$(command_prefix_for_target "/usr/local/man")" ]]; then
+      sudo makewhatis /usr/local/man
+    else
+      makewhatis /usr/local/man
+    fi
   fi
 }
 
@@ -234,8 +275,14 @@ install_completions() {
     mkdir -p "$compdir"
   fi
 
+  local cmd_prefix
+  cmd_prefix="$(command_prefix_for_target "$compdir/$name")"
   printf "copying to %s\n" "$compdir"
-  printf '%s\n' "$cmd" | $sudo_cmd tee "${compdir}/${name}" >/dev/null
+  if [[ -n "$cmd_prefix" ]]; then
+    printf '%s\n' "$cmd" | sudo tee "${compdir}/${name}" >/dev/null
+  else
+    printf '%s\n' "$cmd" | tee "${compdir}/${name}" >/dev/null
+  fi
 }
 
 # === Run ===

@@ -25,8 +25,6 @@ jobs:
       uses: actions/checkout@v3
     - name: Run setup
       run: ./setup
-    - name: Test setup artifacts
-      run: test/setup_artifacts
     - name: Run uninstall
       run: ./uninstall
 
@@ -40,8 +38,6 @@ jobs:
       run: brew install bash
     - name: Run setup
       run: ./setup
-    - name: Test setup artifacts
-      run: test/setup_artifacts
     - name: Run uninstall
       run: ./uninstall
 

@@ -1,124 +1,48 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-print_in_color() {
-  local color="$1"
-  shift
-  if [[ -z ${NO_COLOR+x} ]]; then
-    printf "$color%b\e[0m\n" "$*"
-  else
-    printf "%b\n" "$*"
+prepare_installer() {
+  echo "Initializing installer..."
+  SSI_VERSION="0.1.5"
+
+  # Set up tmp dir where all work is done
+  tmpdir="$(mktemp -d)"
+  trap 'rm -rf "$tmpdir"' EXIT
+  cd "$tmpdir"
+  export PATH="$tmpdir:$PATH"
+
+  # Download ssi if needed
+  if ! command -v ssi >/dev/null 2>&1 || [ "$(ssi --version 2>/dev/null)" != "$SSI_VERSION" ]; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fSsL https://github.com/DannyBen/ssi/releases/download/v$SSI_VERSION/ssi -o ssi
+    elif command -v wget >/dev/null 2>&1; then
+      wget -nv -O ssi https://github.com/DannyBen/ssi/releases/download/v$SSI_VERSION/ssi
+    else
+      echo "Error: please install wget or curl, then try again" >&2
+      exit 1
+    fi
+    chmod +x ssi
   fi
 }
 
-red() { print_in_color "\e[31m" "$*"; }
-green() { print_in_color "\e[32m" "$*"; }
-green_bold() { print_in_color "\e[1;32m" "$*"; }
-blue() { print_in_color "\e[34m" "$*"; }
+prepare_installer
 
-section() {
-  printf "\n=== %s\n" "$(green_bold "$@")"
-}
+if ! command -v git >/dev/null 2>&1; then
+  echo "Error: please install git and try again" >&2
+  exit 1
+fi
 
-sudo_copy() {
-  printf "%s => %s\n" "$(blue "$(printf '%-25s' "$1")")" "$2"
+ssi log info Installing rush
+ssi log debug Cloning github repo
+git clone -q --depth 1 https://github.com/DannyBen/rush.git rush
+ssi install bin rush/rush
+ssi install man rush/doc
+rush completions | ssi install completion - --name rush
 
-  if [[ -n "$3" ]]; then
-    $sudo install -m "$3" "$1" "$2"
-  else
-    $sudo install "$1" "$2"
-  fi
-}
+if command -v rush >/dev/null 2>&1; then
+  ssi log info "rush --version : $(rush --version)"
+else
+  ssi log warn "rush not found on PATH after install"
+fi
 
-copy_executable() {
-  sudo_copy "$1" "/usr/local/bin/" "755"
-}
-
-copy_man() {
-  if [[ ! -d "/usr/local/share/man/man1/" ]]; then return; fi
-
-  for file in "$1"/*.1; do
-    sudo_copy "$file" "/usr/local/share/man/man1/"
-  done
-
-  if command_exist makewhatis; then
-    $sudo makewhatis /usr/local/man
-  fi
-}
-
-install_completions() {
-  cmd="$1"
-  dir="$2"
-
-  if [[ -d "/usr/share/bash-completion/completions" ]]; then
-    compdir="/usr/share/bash-completion/completions"
-  elif [[ -d "/usr/local/etc/bash_completion.d" ]]; then
-    compdir="/usr/local/etc/bash_completion.d"
-  elif command -v brew &>/dev/null && [[ -d "$(brew --prefix)/etc/bash_completion.d" ]]; then
-    compdir="$(brew --prefix)/etc/bash_completion.d"
-  else
-    compdir=''
-  fi
-
-  if [[ -n $compdir ]]; then
-    printf "copying to %s\n" "$compdir"
-    echo "$cmd" | $sudo tee "${compdir}/${dir}" >/dev/null
-  else
-    printf "%s %s\n" "$(red WARN)" "skipping completions installation, compdir not found"
-    echo "     install it manually by adding this to your startup script:"
-    echo "     $cmd"
-  fi
-}
-
-command_exist() {
-  [[ -x "$(command -v "$1")" ]]
-}
-
-need() {
-  command_exist "$1" || fail "Cannot run $1"
-  printf "%s found\n" "$(blue "    $1")"
-}
-
-onerror() {
-  local exit_status=$?
-  printf "\n=== %s\n" "$(red "Aborted with exit status $exit_status")"
-  exit $exit_status
-}
-
-fail() {
-  printf "$(red 'ERR') %s\n" "$*"
-  return 1
-}
-
-initialize() {
-  set -e
-  trap 'onerror' ERR
-
-  # Figure out if we need sudo or not
-  sudo=''
-  if [[ $EUID -ne 0 ]]; then
-    sudo='sudo'
-  fi
-
-  repo="$1"
-  repo_url="https://github.com/${repo}.git"
-  pushd "$(mktemp -d)" >/dev/null
-}
-
-section "Initializing"
-initialize "DannyBen/rush"
-
-section "Checking for pre-requisites"
-need git
-
-section "Cloning $repo"
-git clone --depth 1 "$repo_url" .
-
-section "Copying files"
-copy_executable 'rush'
-copy_man 'doc'
-
-section "Installing bash completions"
-install_completions "eval \"\$(rush completions)\"" "rush"
-
-section "Done"
-rush --version
+ssi log debug Installation complete

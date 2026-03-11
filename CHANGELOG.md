@@ -1,6 +1,18 @@
 Changelog
 ========================================
 
+v1.0.0 - 2026-03-11
+----------------------------------------
+
+- Update setup/uninstall [`b7fa739`](https://github.com/DannyBen/rush/commit/b7fa739)
+- Prevent running `rush default default` [`6783079`](https://github.com/DannyBen/rush/commit/6783079)
+- Improve cleanup in `rush snatch` [`e10e5f7`](https://github.com/DannyBen/rush/commit/e10e5f7)
+- Remove dead search code from `rush list` [`b9612ba`](https://github.com/DannyBen/rush/commit/b9612ba)
+- Improve rush list repo/package detection [`89d9574`](https://github.com/DannyBen/rush/commit/89d9574)
+- Update `rush clone` to set default repo if it is the only one [`9c5d86b`](https://github.com/DannyBen/rush/commit/9c5d86b)
+- Compare [`v0.7.20..v1.0.0`](https://github.com/dannyben/rush/compare/v0.7.20..v1.0.0)
+
+
 v0.7.20 - 2026-02-20
 ----------------------------------------
 

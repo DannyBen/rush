@@ -124,7 +124,10 @@ describe "list"
   approve "rush list --all"
   approve "rush list --all --simple"
   approve "rush list hello"
+  approve "rush list nope:thing" || return 0
+  expect_exit_code 1
   approve "rush list sample"
+  approve "rush list sample:asd"
   approve "rush list nested"
   approve "rush list sample:nested"
   approve "rush list no-such-package"
@@ -166,4 +169,3 @@ describe "copy"
 describe "completions"
   approve "rush completions"
   approve "rush completions -h"
-

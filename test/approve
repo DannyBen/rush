@@ -56,6 +56,7 @@ describe "default"
   approve "rush default -h"
   approve "rush default sample"
   approve "rush default default" || return 0
+  expect_exit_code 1
 
 describe "get"
   approve "rush add sample ~/rush-repos/sample-repo"

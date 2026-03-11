@@ -1722,13 +1722,19 @@ rush_snatch_command() {
   [[ -n "${args['--verbose']}" ]] && export VERBOSE=1
 
   cleanup() {
-    rush remove snatched --purge
-    rm -r "$tmpdir"
+    local exitcode="$1"
+
+    if config_has_key "snatched"; then
+      rush remove snatched --purge || true
+    fi
+
+    rm -rf "$tmpdir"
+    return "$exitcode"
   }
 
   say "snatch" "$repo_id $package"
 
-  trap cleanup EXIT ERR INT TERM
+  trap 'exitcode=$?; cleanup "$exitcode"' EXIT
 
   rush clone "$repo_id" "$path" --name snatched
   if [[ $undo ]]; then

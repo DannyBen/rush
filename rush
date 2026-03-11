@@ -1596,6 +1596,9 @@ rush_default_command() {
 
   # src/commands/default.sh
   repo=${args[repo]}
+
+  [[ $repo != "default" ]] || abort "cannot use 'default' as the source repo"
+
   repo_path=$(config_get "$repo")
 
   [[ $repo_path ]] || abort "repo not found: $repo"
@@ -1603,6 +1606,7 @@ rush_default_command() {
   config_set "default" "$repo_path"
   config_del "$repo"
   say "default" "$repo ($repo_path)"
+
 }
 
 # :command.function

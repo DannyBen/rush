@@ -55,6 +55,7 @@ describe "default"
   approve "rush default" || return 0
   approve "rush default -h"
   approve "rush default sample"
+  approve "rush default default" || return 0
 
 describe "get"
   approve "rush add sample ~/rush-repos/sample-repo"

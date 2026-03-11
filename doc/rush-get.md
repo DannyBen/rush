@@ -1,6 +1,6 @@
 % rush-get(1) | Install a package.
 % 
-% February 2026
+% March 2026
 
 NAME
 ==================================================

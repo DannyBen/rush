@@ -29,6 +29,6 @@ prepare_installer
 
 ssi log info Uninstalling rush
 ssi uninstall bin rush
-ssi uninstall man rush --all
+ssi uninstall man rush
 ssi uninstall completion rush
 ssi log debug Unistallation complete

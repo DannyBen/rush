@@ -23,7 +23,6 @@ Otherwise, export the variable manually.
 Then, run:
 
 ```
-$ rush add sample $PWD/sample-repo
-$ rush default sample
+$ rush add default $PWD/sample-repo
 ```
 

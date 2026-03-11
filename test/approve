@@ -47,6 +47,13 @@ describe "clone"
   approve "rush clone sample --ignore"
   expect_exit_code 0
 
+  cp /root/rush.ini /root/rush.ini.bak
+  rush remove dannyben --purge >/dev/null
+  rm /root/rush.ini
+  approve "rush clone dannyben --shallow"  
+  approve "rush config" "rush_config_default_clone"
+  mv /root/rush.ini.bak /root/rush.ini
+
 describe "config"
   approve "rush config"
   approve "rush config -h"

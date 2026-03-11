@@ -3,7 +3,7 @@ set -euo pipefail
 
 prepare_installer() {
   echo "Initializing installer..."
-  SSI_VERSION="0.1.7"
+  SSI_VERSION="0.1.8"
 
   # Set up tmp dir where all work is done
   tmpdir="$(mktemp -d)"
@@ -32,6 +32,7 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
+ssi log info "ssi --version : $(ssi --version)"
 ssi log info Installing rush
 ssi log debug Cloning github repo
 git clone -q --depth 1 https://github.com/DannyBen/rush.git rush

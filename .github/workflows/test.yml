@@ -24,9 +24,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Run setup
-      run: ./setup
+      run: |
+        ./setup
+        command -v rush
     - name: Run uninstall
-      run: ./uninstall
+      run: |
+        ./uninstall
+        ! command -v rush
 
   macos_setup:
     name: Setup on macOS
@@ -37,9 +41,13 @@ jobs:
     - name: Upgrade the outdated bash
       run: brew install bash
     - name: Run setup
-      run: ./setup
+      run: |
+        ./setup
+        command -v rush
     - name: Run uninstall
-      run: ./uninstall
+      run: |
+        ./uninstall
+        ! command -v rush
 
   static_analysis:
     name: Static analysis

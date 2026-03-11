@@ -1,8 +1,7 @@
 list_show_repo() {
   local repo_or_package="$1"
-  local search="$2"
-  local simple="$3"
-  local all="$4"
+  local simple="$2"
+  local all="$3"
   local repo="$repo_or_package"
   local package glob repo_path infofile regex package_name
 
@@ -40,11 +39,7 @@ list_show_repo() {
   
   else
     for infofile in "${glob[@]}"; do
-      if [[ $search ]]; then
-        regex="$repo_path/(.*${search}.*)/info"
-      else
-        regex="$repo_path/(.*)/info"
-      fi
+      regex="$repo_path/(.*)/info"
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"

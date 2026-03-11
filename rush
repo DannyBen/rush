@@ -1098,9 +1098,8 @@ list_display_item() {
 # src/lib/list_show_repo.sh
 list_show_repo() {
   local repo_or_package="$1"
-  local search="$2"
-  local simple="$3"
-  local all="$4"
+  local simple="$2"
+  local all="$3"
   local repo="$repo_or_package"
   local package glob repo_path infofile regex package_name
 
@@ -1138,11 +1137,7 @@ list_show_repo() {
 
   else
     for infofile in "${glob[@]}"; do
-      if [[ $search ]]; then
-        regex="$repo_path/(.*${search}.*)/info"
-      else
-        regex="$repo_path/(.*)/info"
-      fi
+      regex="$repo_path/(.*)/info"
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"
@@ -1830,15 +1825,14 @@ rush_list_command() {
 
   # src/commands/list.sh
   repo_or_package=${args[repo_or_package]}
-  search=${args[--search]}
   simple=${args[--simple]}
   all=${args[--all]}
 
   if [[ $repo_or_package ]]; then
-    list_show_repo "$repo_or_package" "$search" "$simple" "$all"
+    list_show_repo "$repo_or_package" "$simple" "$all"
   else
     for k in $(config_keys); do
-      list_show_repo "$k" "$search" "$simple" "$all"
+      list_show_repo "$k" "$simple" "$all"
     done
   fi
 

@@ -6,11 +6,16 @@ shallow=${args[--shallow]}
 ignore=${args[--ignore]}
 default_repo_name=${repo_id%%/*}
 default=${args[--default]}
+explicit_name=${args[--name]}
 
 if [[ $default ]]; then
   repo_name=default
+elif [[ $explicit_name ]]; then
+  repo_name=$explicit_name
+elif [[ -z "$(config_keys)" ]]; then
+  repo_name=default
 else
-  repo_name=${args[--name]:-$default_repo_name}
+  repo_name=$default_repo_name
 fi
 
 ## Adjust repo_id - defaults to $user/rush-repo

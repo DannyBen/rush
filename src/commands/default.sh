@@ -1,5 +1,8 @@
 ## Collect variables
 repo=${args[repo]}
+
+[[ $repo != "default" ]] || abort "cannot use 'default' as the source repo"
+
 repo_path=$(config_get "$repo")
 
 ## Verify we have everything we need

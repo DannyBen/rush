@@ -1,12 +1,13 @@
 list_show_repo() {
   local repo_or_package="$1"
-  local search="$2"
-  local simple="$3"
-  local all="$4"
+  local simple="$2"
+  local all="$3"
   local repo="$repo_or_package"
+  local explicit_repo=
   local package glob repo_path infofile regex package_name
 
   if [[ $repo_or_package =~ (.*):(.*) ]]; then
+    explicit_repo=1
     repo=${BASH_REMATCH[1]}
     package=${BASH_REMATCH[2]}
   fi
@@ -14,9 +15,13 @@ list_show_repo() {
   repo_path=$(config_get "$repo")
 
   if [[ ! $repo_path ]]; then
-    package="$repo"
-    repo="default"
-    repo_path=$(config_get "$repo")
+    if [[ $explicit_repo ]]; then
+      abort "repo not found: $repo"
+    else
+      package="$repo"
+      repo="default"
+      repo_path=$(config_get "$repo")
+    fi
   fi
 
   if [[ $package ]]; then
@@ -40,11 +45,7 @@ list_show_repo() {
   
   else
     for infofile in "${glob[@]}"; do
-      if [[ $search ]]; then
-        regex="$repo_path/(.*${search}.*)/info"
-      else
-        regex="$repo_path/(.*)/info"
-      fi
+      regex="$repo_path/(.*)/info"
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"

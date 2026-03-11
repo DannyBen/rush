@@ -1098,13 +1098,14 @@ list_display_item() {
 # src/lib/list_show_repo.sh
 list_show_repo() {
   local repo_or_package="$1"
-  local search="$2"
-  local simple="$3"
-  local all="$4"
+  local simple="$2"
+  local all="$3"
   local repo="$repo_or_package"
+  local explicit_repo=
   local package glob repo_path infofile regex package_name
 
   if [[ $repo_or_package =~ (.*):(.*) ]]; then
+    explicit_repo=1
     repo=${BASH_REMATCH[1]}
     package=${BASH_REMATCH[2]}
   fi
@@ -1112,9 +1113,13 @@ list_show_repo() {
   repo_path=$(config_get "$repo")
 
   if [[ ! $repo_path ]]; then
-    package="$repo"
-    repo="default"
-    repo_path=$(config_get "$repo")
+    if [[ $explicit_repo ]]; then
+      abort "repo not found: $repo"
+    else
+      package="$repo"
+      repo="default"
+      repo_path=$(config_get "$repo")
+    fi
   fi
 
   if [[ $package ]]; then
@@ -1138,11 +1143,7 @@ list_show_repo() {
 
   else
     for infofile in "${glob[@]}"; do
-      if [[ $search ]]; then
-        regex="$repo_path/(.*${search}.*)/info"
-      else
-        regex="$repo_path/(.*)/info"
-      fi
+      regex="$repo_path/(.*)/info"
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"
@@ -1596,6 +1597,9 @@ rush_default_command() {
 
   # src/commands/default.sh
   repo=${args[repo]}
+
+  [[ $repo != "default" ]] || abort "cannot use 'default' as the source repo"
+
   repo_path=$(config_get "$repo")
 
   [[ $repo_path ]] || abort "repo not found: $repo"
@@ -1603,6 +1607,7 @@ rush_default_command() {
   config_set "default" "$repo_path"
   config_del "$repo"
   say "default" "$repo ($repo_path)"
+
 }
 
 # :command.function
@@ -1718,13 +1723,19 @@ rush_snatch_command() {
   [[ -n "${args['--verbose']}" ]] && export VERBOSE=1
 
   cleanup() {
-    rush remove snatched --purge
-    rm -r "$tmpdir"
+    local exitcode="$1"
+
+    if config_has_key "snatched"; then
+      rush remove snatched --purge || true
+    fi
+
+    rm -rf "$tmpdir"
+    return "$exitcode"
   }
 
   say "snatch" "$repo_id $package"
 
-  trap cleanup EXIT ERR INT TERM
+  trap 'exitcode=$?; cleanup "$exitcode"' EXIT
 
   rush clone "$repo_id" "$path" --name snatched
   if [[ $undo ]]; then
@@ -1820,15 +1831,14 @@ rush_list_command() {
 
   # src/commands/list.sh
   repo_or_package=${args[repo_or_package]}
-  search=${args[--search]}
   simple=${args[--simple]}
   all=${args[--all]}
 
   if [[ $repo_or_package ]]; then
-    list_show_repo "$repo_or_package" "$search" "$simple" "$all"
+    list_show_repo "$repo_or_package" "$simple" "$all"
   else
     for k in $(config_keys); do
-      list_show_repo "$k" "$search" "$simple" "$all"
+      list_show_repo "$k" "$simple" "$all"
     done
   fi
 

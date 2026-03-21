@@ -8,9 +8,6 @@
   path=$(expand_path "$path")
   mkdir -p "$path"
 
-@Given git clone is stubbed
-  stub_git_clone
-
 @Given the environment variable '{name}' is set to '{value}'
   export "$name=$value"
   defer unset "$name"
@@ -30,9 +27,21 @@
   mkdir -p "$(dirname "$RUSH_CONFIG")"
   printf '%s = %s\n' "$name" "$path" >>"$RUSH_CONFIG"
 
+@Given the sample repository is available at '{path}'
+  path=$(expand_path "$path")
+  copy_sample_repo_fixture "$path"
+
+@Given git clone populates the cloned repository with the sample fixture
+  export STUB_GIT_CLONE_SOURCE="$(sample_repo_fixture_root)"
+  defer unset STUB_GIT_CLONE_SOURCE
+
 @Then the file '{path}' should exist
   path=$(expand_path "$path")
   [[ -f "$path" ]] || fail "expected file to exist: $path"
+
+@Then the file '{path}' should not exist
+  path=$(expand_path "$path")
+  [[ ! -f "$path" ]] || fail "expected file to not exist: $path"
 
 @Then the directory '{path}' should exist
   path=$(expand_path "$path")
@@ -41,6 +50,12 @@
 @Then the directory '{path}' should not exist
   path=$(expand_path "$path")
   [[ ! -d "$path" ]] || fail "expected directory to not exist: $path"
+
+@Then the temporary directory should not contain entries matching '{pattern}'
+  shopt -s nullglob
+  matches=("$TMPDIR"/$pattern)
+  shopt -u nullglob
+  [[ ${#matches[@]} == 0 ]] || fail "expected $TMPDIR to not contain entries matching: $pattern"
 
 @Then the file '{path}' should include '{text}'
   path=$(expand_path "$path")

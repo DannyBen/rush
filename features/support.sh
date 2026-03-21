@@ -9,6 +9,18 @@ expand_path() {
   fi
 }
 
+sample_repo_fixture_root() {
+  local support_dir
+  support_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+  printf '%s/sample-repo\n' "$(cd "$support_dir/.." && pwd)"
+}
+
+stub_fixture_root() {
+  local support_dir
+  support_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+  printf '%s/fixtures/bin\n' "$support_dir"
+}
+
 prepare_isolated_environment() {
   local old_pwd="$PWD"
   local old_home="${HOME-}"
@@ -38,55 +50,35 @@ prepare_isolated_environment() {
 }
 
 prepare_configured_rush_environment() {
-  local fixture_root="$PWD/sample-repo"
+  local fixture_root
+  fixture_root=$(sample_repo_fixture_root)
 
   prepare_isolated_environment
   cp -R "$fixture_root" "$RUSH_ROOT/sample-repo"
   echo "default = $RUSH_ROOT/sample-repo" >"$RUSH_CONFIG"
 }
 
-stub_command() {
+copy_sample_repo_fixture() {
+  local path="$1"
+  local fixture_root
+  fixture_root=$(sample_repo_fixture_root)
+
+  mkdir -p "$(dirname "$path")"
+  cp -R "$fixture_root" "$path"
+}
+
+install_stubbed_command() {
   local command="$1"
+  local fixture_root
   local stub_root
   local stub_path
 
+  fixture_root=$(stub_fixture_root)
   stub_root=$(mktemp -d)
   stub_path="$stub_root/$command"
 
-  cat >"$stub_path" <<EOF
-#!/usr/bin/env bash
-printf 'stubbed: %s' '$command'
-if (( \$# )); then
-  printf ' %s' "\$@"
-fi
-printf '\n'
-EOF
-
-  chmod +x "$stub_path"
-  export PATH="$stub_root:$PATH"
-  defer rm -rf "$stub_root"
-}
-
-stub_git_clone() {
-  local stub_root
-  local stub_path
-
-  stub_root=$(mktemp -d)
-  stub_path="$stub_root/git"
-
-  cat >"$stub_path" <<'EOF'
-#!/usr/bin/env bash
-printf 'stubbed: git'
-if (( $# )); then
-  printf ' %s' "$@"
-fi
-printf '\n'
-
-if [[ "$1" == "clone" ]]; then
-  mkdir -p "${@: -1}"
-fi
-EOF
-
+  [[ -f "$fixture_root/$command" ]] || fail "missing stub fixture: $fixture_root/$command"
+  cp "$fixture_root/$command" "$stub_path"
   chmod +x "$stub_path"
   export PATH="$stub_root:$PATH"
   defer rm -rf "$stub_root"

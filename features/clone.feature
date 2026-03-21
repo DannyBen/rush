@@ -15,7 +15,7 @@ Scenario: Show --help
 
 Scenario: Clone a repository into the default location
   Given I am in an isolated environment
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby'
   Then the exit code should mean success
   And stdout should include 'stubbed: git clone https://github.com/bobby/rush-repo.git'
@@ -24,7 +24,7 @@ Scenario: Clone a repository into the default location
 
 Scenario: Perform a shallow clone
   Given rush is properly configured
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --shallow'
   Then the exit code should mean success
   And stdout should include 'stubbed: git clone --depth 1 https://github.com/bobby/rush-repo.git'
@@ -32,7 +32,7 @@ Scenario: Perform a shallow clone
 
 Scenario: Clone using SSH
   Given I am in an isolated environment
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --ssh'
   Then the exit code should mean success
   And stdout should include 'stubbed: git clone git@github.com:bobby/rush-repo.git'
@@ -40,7 +40,7 @@ Scenario: Clone using SSH
 
 Scenario: Clone using an explicit name
   Given rush is properly configured
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --name somename'
   Then the exit code should mean success
   And the rush config file should match 'somename = .+/rush-repos/bobby/rush-repo'
@@ -51,14 +51,14 @@ Scenario: Clone as the default repository
     """
     sample = ~/rush-repos/sample-repo
     """
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --default'
   Then the exit code should mean success
   And the rush config file should match 'default = .+/rush-repos/bobby/rush-repo'
 
 Scenario: Abort when the target directory exists
   Given I am in an isolated environment
-  And git clone is stubbed
+  And the command 'git' is stubbed
   And the directory '~/rush-repos/bobby/rush-repo' exists
   When I run 'rush clone bobby'
   Then the exit code should mean failure
@@ -67,7 +67,7 @@ Scenario: Abort when the target directory exists
 
 Scenario: Abort when the repository name is already registered
   Given rush is properly configured
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --name default'
   Then the exit code should mean failure
   And stdout should include 'the repository is already registered'
@@ -75,7 +75,7 @@ Scenario: Abort when the repository name is already registered
 
 Scenario: Skip when the target directory exists and --ignore is used
   Given I am in an isolated environment
-  And git clone is stubbed
+  And the command 'git' is stubbed
   And the directory '~/rush-repos/bobby/rush-repo' exists
   When I run 'rush clone bobby --ignore'
   Then the exit code should mean success
@@ -83,7 +83,7 @@ Scenario: Skip when the target directory exists and --ignore is used
 
 Scenario: Skip when the repository name is already registered and --ignore is used
   Given rush is properly configured
-  And git clone is stubbed
+  And the command 'git' is stubbed
   When I run 'rush clone bobby --name default --ignore'
   Then the exit code should mean success
   And stdout should include 'skipping default (exists)'

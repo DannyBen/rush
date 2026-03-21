@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+case "$1" in
+  clone)
+    target="${@: -1}"
+
+    printf 'stubbed: git'
+    if (( $# )); then
+      printf ' %s' "$@"
+    fi
+    printf '\n'
+    mkdir -p "$target"
+
+    if [[ -n "${STUB_GIT_CLONE_SOURCE-}" ]]; then
+      cp -R "${STUB_GIT_CLONE_SOURCE}/." "$target"
+    fi
+    ;;
+  diff)
+    printf '%s' "${STUB_GIT_DIFF_OUTPUT-}"
+    ;;
+  add|update-index|commit|push|pull|status)
+    printf 'stubbed: git'
+    if (( $# )); then
+      printf ' %s' "$@"
+    fi
+    printf '\n'
+    ;;
+  *)
+    printf 'stubbed: git'
+    if (( $# )); then
+      printf ' %s' "$@"
+    fi
+    printf '\n'
+    ;;
+esac

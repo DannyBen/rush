@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+printf 'stubbed: my-editor'
+if (( $# )); then
+  printf ' %s' "$@"
+fi
+printf '\n'

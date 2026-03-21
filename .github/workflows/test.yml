@@ -9,13 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Run shellcheck tests
       run: shellcheck rush setup
     - name: Build container for approval tests
       run: docker compose build
     - name: Run approval tests
       run: docker compose run ci
+    - name: Install Shellkin
+      run: curl -Ls get.dannyb.co/shellkin/setup | bash
+    - name: Add repo root to PATH
+      run: echo "$PWD" >> $GITHUB_PATH
+    - name: Run acceptance tests
+      run: shellkin test
 
   ubuntu_setup:
     name: Setup on Ubuntu

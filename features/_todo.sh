@@ -80,12 +80,6 @@ describe "snatch"
   approve "rush snatch dannyben hello --force --verbose"
   approve "ls /tmp/rush-snatch*"
 
-describe "info"
-  approve "rush info" || return 0
-  approve "rush info -h"
-  approve "rush info hello"
-  approve "rush info sample:hello"
-
 describe "pull"
   approve "rush pull" || return 0
   approve "rush pull -h"
@@ -132,13 +126,6 @@ describe "edit"
   approve "rush edit -h"
   approve "rush edit hello"
   approve "rush edit hello info"
-
-describe "show"
-  approve "rush show" || return 0
-  approve "rush show -h"
-  approve "rush show download"
-  approve "rush show download main"
-  approve "rush show nested"
 
 describe "copy"
   mkdir ~/rush-repos/target

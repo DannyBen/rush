@@ -1,50 +1,6 @@
 # This is the old approve test file, with only the not yet implemented feature
 # tests. once we implement equivalt tests, we should delet ethem from here
 
-describe "clone"
-  rm -rf /root/rush-repos/dannyben
-  approve "rush clone" || return 0
-  approve "rush clone -h"
-  
-  approve "rush clone dannyben --shallow"
-  count=$(cd /root/rush-repos/dannyben/rush-repo && git rev-list --count HEAD -n 10)
-  [[ $count == 1 ]] || fail "Expected shallow clone, got $count commits"
-
-  rush remove dannyben --purge >/dev/null
-  approve "rush clone dannyben --shallow --name somename && rush config"
-
-  rush remove somename --purge >/dev/null
-  approve "rush clone dannyben --shallow --default && rush config"
-  rush remove default --purge >/dev/null
-
-  rush remove dannyben --purge >/dev/null
-  approve "rush clone dannyben"
-  count=$(cd /root/rush-repos/dannyben/rush-repo && git rev-list --count HEAD -n 10)
-  [[ $count == 10 ]] || fail "Expected full clone, got $count commits"
-
-  approve "rush clone dannyben" "rush_clone_dannyben_dir_exist" || return 0
-  expect_exit_code 1
-
-  approve "rush clone sample" || return 0
-  expect_exit_code 1
-
-  approve "rush clone sample --ignore"
-  expect_exit_code 0
-
-  cp /root/rush.ini /root/rush.ini.bak
-  rush remove dannyben --purge >/dev/null
-  rm /root/rush.ini
-  approve "rush clone dannyben --shallow"  
-  approve "rush config" "rush_config_default_clone"
-  mv /root/rush.ini.bak /root/rush.ini
-
-describe "default"
-  approve "rush default" || return 0
-  approve "rush default -h"
-  approve "rush default sample"
-  approve "rush default default" || return 0
-  expect_exit_code 1
-
 describe "get"
   approve "rush add sample ~/rush-repos/sample-repo"
   approve "rush get" || return 0
@@ -119,13 +75,6 @@ describe "search"
   approve "rush search -h"
   approve "rush search running"
   approve "rush search hello"
-
-describe "edit"
-  export EDITOR=cat
-  approve "rush edit" || return 0
-  approve "rush edit -h"
-  approve "rush edit hello"
-  approve "rush edit hello info"
 
 describe "copy"
   mkdir ~/rush-repos/target

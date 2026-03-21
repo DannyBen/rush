@@ -2,8 +2,8 @@ expand_path() {
   local path="$1"
   if [[ "$path" == "~" ]]; then
     printf '%s\n' "$HOME"
-  elif [[ "$path" == ~/* ]]; then
-    printf '%s/%s\n' "$HOME" "${path#~/}"
+  elif [[ "$path" == "~/"* ]]; then
+    printf '%s/%s\n' "$HOME" "${path#"~/"}"
   else
     printf '%s\n' "$path"
   fi
@@ -60,6 +60,31 @@ if (( \$# )); then
   printf ' %s' "\$@"
 fi
 printf '\n'
+EOF
+
+  chmod +x "$stub_path"
+  export PATH="$stub_root:$PATH"
+  defer rm -rf "$stub_root"
+}
+
+stub_git_clone() {
+  local stub_root
+  local stub_path
+
+  stub_root=$(mktemp -d)
+  stub_path="$stub_root/git"
+
+  cat >"$stub_path" <<'EOF'
+#!/usr/bin/env bash
+printf 'stubbed: git'
+if (( $# )); then
+  printf ' %s' "$@"
+fi
+printf '\n'
+
+if [[ "$1" == "clone" ]]; then
+  mkdir -p "${@: -1}"
+fi
 EOF
 
   chmod +x "$stub_path"

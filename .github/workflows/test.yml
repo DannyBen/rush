@@ -16,6 +16,10 @@ jobs:
       run: docker compose build
     - name: Run approval tests
       run: docker compose run ci
+    - name: Install Shellkin
+      run: curl -Ls get.dannyb.co/shellkin/setup | bash
+    - name: Run acceptance tests
+      run: shellkin test
 
   ubuntu_setup:
     name: Setup on Ubuntu

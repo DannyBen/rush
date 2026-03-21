@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-echo "What's the rush?"
-echo "REPO:      $REPO"
-echo "REPO_PATH: $REPO_PATH"
-echo "USER_CWD:  $USER_CWD"
-echo "VERBOSE:   $VERBOSE"
-echo "FORCE:     $FORCE"

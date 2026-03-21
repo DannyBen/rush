@@ -1,4 +1,0 @@
-missing required argument: REPO
-usage: rush default REPO
-examples:
-  rush default sample

@@ -1,5 +1,0 @@
-missing required argument: PACKAGE
-usage: rush show PACKAGE [FILE]
-examples:
-  rush show docker
-  rush show docker main

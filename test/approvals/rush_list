@@ -1,8 +1,0 @@
-[32mbootstrap           [0m  Shows how to run another command from the same repository
-[32mdownload            [0m  Shows how a script can copy files from its own folder
-[32mhello               [0m  This is a simple example.
-[32mnested              [0m  Nested packages (show with 'rush list nested')
-[32msample:bootstrap    [0m  Shows how to run another command from the same repository
-[32msample:download     [0m  Shows how a script can copy files from its own folder
-[32msample:hello        [0m  This is a simple example.
-[32msample:nested       [0m  Nested packages (show with 'rush list nested')

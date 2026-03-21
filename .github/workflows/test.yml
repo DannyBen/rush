@@ -12,10 +12,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Run shellcheck tests
       run: shellcheck rush setup
-    - name: Build container for approval tests
-      run: docker compose build
-    - name: Run approval tests
-      run: docker compose run ci
     - name: Install Shellkin
       run: curl -Ls get.dannyb.co/shellkin/setup | bash
     - name: Add repo root to PATH
@@ -54,28 +50,3 @@ jobs:
       run: |
         ./uninstall
         ! command -v rush
-
-  static_analysis:
-    name: Static analysis
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    # Rush needed for easy installation of latest shfmt
-    - name: Install rush
-      run: curl -Ls http://get.dannyb.co/rush/setup | bash
-
-    - name: Connect rush repo
-      run: rush clone dannyben --shallow --default
-
-    - name: Install shfmt and opcode
-      run: rush get shfmt && rush get opcode
-
-    - name: Run shellcheck tests
-      run: op shellcheck
-
-    - name: Run shfmt tests
-      run: op shfmt

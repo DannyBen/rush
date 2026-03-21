@@ -1,5 +1,0 @@
-[35mclone[0m       | [1mhttps://github.com/dannyben/rush-repo.git[0m
-Cloning into '/root/rush-repos/dannyben/rush-repo'...
-[36m# /root/rush.ini[0m
-sample = /root/rush-repos/sample-repo
-somename = /root/rush-repos/dannyben/rush-repo

@@ -1,3 +1,5 @@
+readonly SUPPORT_PROJECT_ROOT="$PWD"
+
 expand_path() {
   local path="$1"
   if [[ "$path" == "~" ]]; then
@@ -10,15 +12,11 @@ expand_path() {
 }
 
 sample_repo_fixture_root() {
-  local support_dir
-  support_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-  printf '%s/sample-repo\n' "$(cd "$support_dir/.." && pwd)"
+  printf '%s\n' "$SUPPORT_PROJECT_ROOT/sample-repo"
 }
 
 stub_fixture_root() {
-  local support_dir
-  support_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-  printf '%s/fixtures/bin\n' "$support_dir"
+  printf '%s\n' "$SUPPORT_PROJECT_ROOT/features/fixtures/bin"
 }
 
 prepare_isolated_environment() {

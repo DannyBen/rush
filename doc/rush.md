@@ -1,6 +1,6 @@
 % rush(1) Version 1.0.0 | Personal package manager.
 % Danny Ben Shitrit \<https://github.com/dannyben\>
-% March 2026
+% July 2026
 
 NAME
 ==================================================

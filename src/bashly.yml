@@ -31,7 +31,6 @@ commands:
 - name: add
   alias: a
   group: Repository
-  completions: [<directory>]
   help: |-
     Register a local repository.
 
@@ -45,6 +44,7 @@ commands:
   - name: path
     required: true
     help: Path to the repository.
+    completions: [<directory>]
 
   examples:
   - rush add default ~/rush-repos/default
@@ -74,7 +74,6 @@ commands:
 - name: clone
   group: Git
   dependencies: [git]
-  completions: [<directory>]
   help: |-
     Clone a GitHub package repository.
 
@@ -91,6 +90,7 @@ commands:
       If you need to use a different name, use the `user/repo` syntax.
 
   - name: path
+    completions: [<directory>]
     help: |-
       Local path to clone the repository into.
 
@@ -187,7 +187,6 @@ commands:
 - name: get
   alias: g
   group: Package
-  completions: [$(rush list -s -a)]
   help: |-
     Install a package.
 
@@ -200,6 +199,7 @@ commands:
   args:
   - name: package
     required: true
+    completions: [$(rush list -s -a)]
     help: &package_help |-
       Package name.
 
@@ -232,7 +232,6 @@ commands:
 - name: undo
   alias: u
   group: Package
-  completions: [$(rush list -s -a)]
   help: |-
     Uninstall a package.
 
@@ -241,6 +240,7 @@ commands:
   args:
   - name: package
     required: true
+    completions: [$(rush list -s -a)]
     help: *package_help
 
   flags:
@@ -293,12 +293,12 @@ commands:
 
 - name: copy
   group: Package
-  completions: [$(rush list -s -a)]
   help: Copy a package between local repositories.
 
   args:
   - name: source_package
     required: true
+    completions: [$(rush list -s -a)]
     help: |-
       Source package name.
 
@@ -325,7 +325,6 @@ commands:
 - name: info
   alias: i
   group: Package
-  completions: [$(rush list -s -a)]
   help: |-
     Show information about a package.
 
@@ -334,6 +333,7 @@ commands:
   args:
   - name: package
     required: true
+    completions: [$(rush list -s -a)]
     help: *package_help
 
   examples:
@@ -385,12 +385,12 @@ commands:
 - name: edit
   alias: e
   group: Package
-  completions: [$(rush list -s -a)]
   help: Edit package files.
 
   args:
   - name: package
     required: true
+    completions: [$(rush list -s -a)]
     help: *package_help
 
   - name: file
@@ -399,12 +399,12 @@ commands:
 
 - name: show
   group: Package
-  completions: [$(rush list -s -a)]
   help: Show package files.
 
   args:
   - name: package
     required: true
+    completions: [$(rush list -s -a)]
     help: *package_help
 
   - name: file

@@ -17,7 +17,7 @@ jobs:
     - name: Add repo root to PATH
       run: echo "$PWD" >> $GITHUB_PATH
     - name: Run acceptance tests
-      run: shellkin test
+      run: shellkin
 
   ubuntu_setup:
     name: Setup on Ubuntu

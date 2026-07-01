@@ -1,6 +1,6 @@
 % rush-list(1) | Show packages in one or all repositories.
 % 
-% March 2026
+% July 2026
 
 NAME
 ==================================================

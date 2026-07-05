@@ -98,6 +98,11 @@ rush list
 
 Show packages in one or all repositories.
 
+rush menu
+--------------------------------------------------
+
+Select a package from an interactive menu.
+
 rush search
 --------------------------------------------------
 
@@ -145,7 +150,7 @@ Default: ~/rush-repos
 SEE ALSO
 ==================================================
 
-**rush-add**(1), **rush-remove**(1), **rush-clone**(1), **rush-pull**(1), **rush-push**(1), **rush-config**(1), **rush-default**(1), **rush-get**(1), **rush-undo**(1), **rush-snatch**(1), **rush-copy**(1), **rush-info**(1), **rush-list**(1), **rush-search**(1), **rush-edit**(1), **rush-show**(1), **rush-completions**(1)
+**rush-add**(1), **rush-remove**(1), **rush-clone**(1), **rush-pull**(1), **rush-push**(1), **rush-config**(1), **rush-default**(1), **rush-get**(1), **rush-undo**(1), **rush-snatch**(1), **rush-copy**(1), **rush-info**(1), **rush-list**(1), **rush-menu**(1), **rush-search**(1), **rush-edit**(1), **rush-show**(1), **rush-completions**(1)
 
 # SOURCE CODE
 

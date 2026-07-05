@@ -372,6 +372,32 @@ commands:
   - rush list apps
   - rush list apps --simple --all
 
+- name: menu
+  group: Package
+  dependencies: [fzf]
+  help: Select a package from an interactive menu.
+
+  args:
+  - name: repo_or_package
+    help: |-
+      Repository name or package name.
+
+      Leave blank to show all packages in all repositories.
+
+      Provide a repository name to show only packages in this repository.
+
+      Provide a package name (may be in the form of `repo:package`) to show nested packages.
+
+  flags:
+  - long: --install
+    short: -i
+    help: Install the selected package instead of showing its info.
+
+  examples:
+  - rush menu
+  - rush menu --install
+  - rush menu personal
+
 - name: search
   alias: s
   group: Package

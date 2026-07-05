@@ -2223,16 +2223,15 @@ rush_menu_command() {
 
   [[ $repo_or_package ]] && list_args+=("$repo_or_package")
 
-  items=$(rush list "${list_args[@]}")
+  items=$(NO_COLOR=1 rush list "${list_args[@]}")
 
-  if ! selected=$(printf "%s\n" "$items" | fzf --ansi); then
+  if ! selected=$(printf "%s\n" "$items" | fzf --color='fg+:green:bold,bg+:-1,pointer:green:bold'); then
     exit 0
   fi
 
   [[ $selected ]] || exit 0
 
-  plain=$(printf "%s" "$selected" | sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g')
-  package=${plain%%[[:space:]]*}
+  package=${selected%%[[:space:]]*}
 
   [[ $package ]] || exit 0
 

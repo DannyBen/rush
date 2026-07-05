@@ -19,15 +19,8 @@ stub_fixture_root() {
   printf '%s\n' "$SUPPORT_PROJECT_ROOT/features/fixtures/bin"
 }
 
-strip_ansi() {
-  local escape
-  escape=$(printf '\033')
-  sed -E "s/${escape}\\[[0-9;]*[[:alpha:]]//g" "$@"
-}
-
 fzf_menu_display() {
-  strip_ansi "$1" |
-    tac |
+  tac "$1" |
     while IFS= read -r line; do
       if ((${#line} > 75)); then
         line="${line:0:75}·"

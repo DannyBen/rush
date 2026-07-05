@@ -7,8 +7,7 @@ if [[ ${STUB_FZF_INPUT-} ]]; then
 fi
 
 while IFS= read -r line; do
-  plain=$(printf "%s" "$line" | sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g')
-  package=${plain%%[[:space:]]*}
+  package=${line%%[[:space:]]*}
 
   if [[ $package == "$selection" ]]; then
     printf "%s\n" "$line"

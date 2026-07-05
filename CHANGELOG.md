@@ -1,6 +1,16 @@
 Changelog
 ========================================
 
+v1.0.1 - 2026-07-05
+----------------------------------------
+
+- Add shellkin acceptance tests [`c4050ec`](https://github.com/DannyBen/rush/commit/c4050ec)
+- Update bash completions with bashly 1.4.0 / completely 0.8.0 [`56708eb`](https://github.com/DannyBen/rush/commit/56708eb)
+- Avoid showing packages without `main` in `rush list` [`24d1d6f`](https://github.com/DannyBen/rush/commit/24d1d6f)
+- Add interactive `rush menu` command for viewing and installing with fzf [`5db5370`](https://github.com/DannyBen/rush/commit/5db5370)
+- Compare [`v1.0.0..v1.0.1`](https://github.com/dannyben/rush/compare/v1.0.0..v1.0.1)
+
+
 v1.0.0 - 2026-03-11
 ----------------------------------------
 

@@ -24,7 +24,6 @@ Scenario: Show package names only
     bootstrap
     download
     hello
-    nested
     """
 
 Scenario: Show nested packages for a package name

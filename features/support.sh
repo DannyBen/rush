@@ -19,6 +19,24 @@ stub_fixture_root() {
   printf '%s\n' "$SUPPORT_PROJECT_ROOT/features/fixtures/bin"
 }
 
+strip_ansi() {
+  local escape
+  escape=$(printf '\033')
+  sed -E "s/${escape}\\[[0-9;]*[[:alpha:]]//g" "$@"
+}
+
+fzf_menu_display() {
+  strip_ansi "$1" |
+    tac |
+    while IFS= read -r line; do
+      if ((${#line} > 75)); then
+        line="${line:0:75}·"
+      fi
+
+      printf "▌ %s\n" "$line"
+    done
+}
+
 prepare_isolated_environment() {
   local old_pwd="$PWD"
   local old_home="${HOME-}"
@@ -75,7 +93,11 @@ install_stubbed_command() {
   stub_root=$(mktemp -d)
   stub_path="$stub_root/$command"
 
-  [[ -f "$fixture_root/$command" ]] || fail "missing stub fixture: $fixture_root/$command"
+  if [[ ! -f "$fixture_root/$command" ]]; then
+    fail "missing stub fixture: $fixture_root/$command"
+    return
+  fi
+
   cp "$fixture_root/$command" "$stub_path"
   chmod +x "$stub_path"
   export PATH="$stub_root:$PATH"

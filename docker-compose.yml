@@ -1,5 +1,5 @@
 services:
-  bash:
+  local:
     build: .
     <<: &default
       image: dannyben/rush-local
@@ -9,3 +9,10 @@ services:
       - ./rush:/usr/local/bin/rush
       - ./test:/test
       - ./sample-repo:/root/rush-repos/sample-repo
+
+  public:
+    image: dannyben/rush:latest
+    build: .
+    environment:
+      LC_ALL: en_US.UTF-8 # consistent sort order
+    entrypoint: bash

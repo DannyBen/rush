@@ -37,7 +37,7 @@ list_show_repo() {
 
   if [[ ${glob[0]} =~ .*\*.* ]]; then
     infofile="$repo_path/$package/info"
-    if [[ -f "$infofile" ]]; then
+    if [[ -f "$infofile" && -f "$repo_path/$package/main" ]]; then
       list_display_item "$package" "$infofile" "$repo" "$simple"
     elif [[ ! $simple ]]; then
       red "nothing in $repo repo"
@@ -49,6 +49,7 @@ list_show_repo() {
 
       if [[ $infofile =~ $regex ]]; then
         package_name="${BASH_REMATCH[1]}"
+        [[ -f "$repo_path/$package_name/main" ]] || continue
         list_display_item "$package_name" "$infofile" "$repo" "$simple"
       fi
     done

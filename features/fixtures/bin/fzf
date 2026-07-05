@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+selection=${STUB_FZF_SELECTION:-hello}
+input=$(cat)
+
+if [[ ${STUB_FZF_INPUT-} ]]; then
+  printf "%s\n" "$input" >"$STUB_FZF_INPUT"
+fi
+
+while IFS= read -r line; do
+  package=${line%%[[:space:]]*}
+
+  if [[ $package == "$selection" ]]; then
+    printf "%s\n" "$line"
+    exit 0
+  fi
+done <<<"$input"
+
+exit 1

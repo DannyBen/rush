@@ -29,7 +29,7 @@ Rush was developed using the [Bashly Command Line Framework][bashly].
 
 ## Prerequisites
 
-- Bash 4.0 or higher (`brew install bash` on mac).
+- Bash 4.2 or higher (`brew install bash` on mac).
 - curl 
 - git
 
@@ -101,39 +101,38 @@ can use [this docker image][docker-image], which has Rush copied to its path:
 ```
 $ rush --help
 
-rush - Personal package manager
-
 Usage:
   rush COMMAND
   rush [COMMAND] --help | -h
   rush --version | -v
 
 Repository Commands:
-  add           Register a local repository
-  remove        Unregister a local repository
+  add           Register a local repository.
+  remove        Unregister a local repository.
 
 Git Commands:
-  clone         Clone a GitHub package repository
-  pull          Git pull one or all repositories
-  push          Git push one or all repositories
+  clone         Clone a GitHub package repository.
+  pull          Git pull one or all repositories.
+  push          Git push one or all repositories.
 
 Config Commands:
-  config        Show or edit the configuration file
-  default       Set a default repository
+  config        Show or edit the configuration file.
+  default       Set a default repository.
 
 Package Commands:
-  get           Install a package (default)
-  undo          Uninstall a package
-  snatch        Install a package from a remote repo
-  copy          Copy a package between local repositories
-  info          Show information about a package
-  list          Show packages in one or all repositories
-  search        Search in package names and info files
-  edit          Edit package files
-  show          Show package files
+  get           Install a package. (default)
+  undo          Uninstall a package.
+  snatch        Install a package from a remote repo.
+  copy          Copy a package between local repositories.
+  info          Show information about a package.
+  list          Show packages in one or all repositories.
+  menu          Select a package from an interactive menu.
+  search        Search in package names and info files.
+  edit          Edit package files.
+  show          Show package files.
 
 Internal Commands:
-  completions   Generate bash completions
+  completions   Generate bash completions.
 
 Options:
   --help, -h
@@ -144,13 +143,13 @@ Options:
 
 Environment Variables:
   RUSH_CONFIG
-    Location of the rush config file
-
+    Location of the rush config file.
+    
     Default: ~/rush.ini
 
   RUSH_ROOT
     Location of the default base directory for cloning repositories.
-
+    
     Default: ~/rush-repos
 ```
 

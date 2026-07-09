@@ -155,7 +155,7 @@ commands:
 
   - long: --message
     short: -m
-    arg: TEXT
+    arg: text
     help: Commit message.
     default: automatic commit
 

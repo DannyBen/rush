@@ -1,6 +1,6 @@
 % rush-pull(1) | Git pull one or all repositories.
 % 
-% August 2026
+% September 2026
 
 NAME
 ==================================================

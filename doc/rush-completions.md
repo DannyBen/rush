@@ -1,6 +1,6 @@
 % rush-completions(1) | Generate a shell completion script
 % 
-% August 2026
+% September 2026
 
 NAME
 ==================================================
